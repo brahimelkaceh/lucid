@@ -47,7 +47,7 @@ export const paths = {
     },
   },
   dashboard: {
-    index: '/dashboard',
+    index: '/',
     academy: {
       index: '/dashboard/academy',
       courseDetails: '/dashboard/academy/courses/:courseId',
@@ -64,24 +64,59 @@ export const paths = {
     chat: '/dashboard/chat',
     crypto: '/dashboard/crypto',
     revenus: {
-      index: '/dashboard/revenus',
+      index: '/revenus',
+    },
+    salary: {
+      index: '/salary',
+      newSalary: '/salary/salary/create',
+      newPAyement: '/salary/payement/create',
+    },
+    expenses: {
+      index: '/expenses',
+      edit: '/expenses/edit',
+      create: '/expenses/create',
+    },
+    utilities: {
+      index: '/utilities',
+    },
+    achats: {
+      index: '/achats',
+      search: '/achats/search',
+      edit: '/achats/edit',
     },
     projets: {
       index: '/projets',
+      create: '/projets/create',
+      details: '/projets/:projetId/',
+      edit: '/projets/:projetId/edit',
+      tranche: '/projets/tranche',
+    },
+    invoices: {
+      index: '/invoices',
+      create: '/invoices/create',
+      edit: '/invoices/edit',
+      details: '/invoices/:invoiceId',
     },
     clients: {
       index: '/clients',
       create: '/clients/create',
+      edit: '/clients/edit',
+      details: '/clients/:invoiceId',
     },
     membres: {
       index: '/membres',
+      create: '/membres/create',
     },
+    cash: {
+      index: '/cash',
+    },
+    // ////////////////////////
     ecommerce: '/dashboard/ecommerce',
     fileManager: '/dashboard/file-manager',
-    invoices: {
-      index: '/dashboard/invoices',
-      details: '/dashboard/invoices/:orderId',
-    },
+    // invoices: {
+    //   index: '/dashboard/invoices',
+    //   details: '/dashboard/invoices/:orderId',
+    // },
     jobs: {
       index: '/dashboard/jobs',
       create: '/dashboard/jobs/create',

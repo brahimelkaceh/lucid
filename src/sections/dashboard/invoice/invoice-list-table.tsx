@@ -14,6 +14,7 @@ import TableCell from '@mui/material/TableCell';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
+import EditIcon from '@mui/icons-material/Edit';
 
 import { RouterLink } from 'src/components/router-link';
 import { Scrollbar } from 'src/components/scrollbar';
@@ -59,6 +60,7 @@ const InvoiceRow: FC<InvoiceRowProps> = (props) => {
   const { invoice, ...other } = props;
 
   const statusColor = statusColorsMap[invoice.status];
+
   const totalAmount = numeral(invoice.totalAmount).format('0,0.00');
   const issueDate = invoice.issueDate && format(invoice.issueDate, 'dd/MM/yyyy');
   const dueDate = invoice.dueDate && format(invoice.dueDate, 'dd/MM/yyyy');
@@ -130,12 +132,28 @@ const InvoiceRow: FC<InvoiceRowProps> = (props) => {
         </Typography>
       </TableCell>
       <TableCell align="right">
-        <SeverityPill color={statusColor}>{invoice.status}</SeverityPill>
+        <SeverityPill color={statusColor}>
+          {invoice.status == 'canceled'
+            ? 'Impayée'
+            : invoice.status == 'paid'
+            ? 'payé'
+            : 'en attente'}
+        </SeverityPill>
       </TableCell>
       <TableCell align="right">
         <IconButton
           component={RouterLink}
+          href={paths.dashboard.invoices.edit}
+          color="warning"
+        >
+          <SvgIcon>
+            <EditIcon />
+          </SvgIcon>
+        </IconButton>
+        <IconButton
+          component={RouterLink}
           href={paths.dashboard.invoices.details}
+          color="info"
         >
           <SvgIcon>
             <ArrowRightIcon />
@@ -176,6 +194,7 @@ export const InvoiceListTable: FC<InvoiceListTableProps> = (props) => {
 
   if (group) {
     const groupedInvoices = groupInvoices(items);
+
     const statuses = Object.keys(groupedInvoices) as InvoiceStatus[];
 
     content = (
@@ -195,7 +214,7 @@ export const InvoiceListTable: FC<InvoiceListTableProps> = (props) => {
                 color="text.secondary"
                 variant="h6"
               >
-                {groupTitle == 'Paid' ? 'Payés' : groupTitle == 'Pending' ? 'En cours' : 'Annulées'}{' '}
+                {groupTitle == 'Paid' ? 'Payés' : groupTitle == 'Pending' ? 'En cours' : 'Impayées'}{' '}
                 ({count})
               </Typography>
               {hasInvoices && (
@@ -247,6 +266,7 @@ export const InvoiceListTable: FC<InvoiceListTableProps> = (props) => {
         page={page}
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 25]}
+        labelRowsPerPage="Lignes par page"
       />
     </Stack>
   );

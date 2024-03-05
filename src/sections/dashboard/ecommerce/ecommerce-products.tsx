@@ -40,7 +40,7 @@ export const EcommerceProducts: FC<EcommerceProductsProps> = (props) => {
   const { products } = props;
 
   return (
-    <Card sx={{ minWidth: 300, maxHeight: '80vh', overflowY: 'scroll' }}>
+    <Card sx={{ minWidth: 300, maxHeight: '72vh', overflowY: 'scroll' }}>
       <Table>
         <TableBody>
           {products.map((product, index) => {

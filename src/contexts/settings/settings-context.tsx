@@ -40,3 +40,15 @@ export const SettingsContext = createContext<SettingsContextType>({
   handleUpdate: () => {},
   isCustom: false,
 });
+
+// src/
+//  --pages /
+//    --projects /
+//      --index.tsx;
+//      components / // ! like search bar , table list and more...
+//      services / // ! here whene we can add our own services like total projects or if we have other calculations
+//      --get-all-projects.tsx;
+//      --get-single-project.tsx;
+//  --api /
+//    --projects /
+//      --index.tsx; // ! here when we will fetch all the projects apis

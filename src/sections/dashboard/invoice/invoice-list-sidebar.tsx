@@ -163,7 +163,7 @@ export const InvoiceListSidebar: FC<InvoiceListSidebarProps> = (props) => {
             defaultValue=""
             fullWidth
             inputProps={{ ref: queryRef }}
-            placeholder="Chercher par numéro"
+            placeholder="Rechercher par numéro"
             startAdornment={
               <InputAdornment position="start">
                 <SvgIcon>
@@ -204,7 +204,7 @@ export const InvoiceListSidebar: FC<InvoiceListSidebarProps> = (props) => {
               mb: 2,
             }}
           >
-            Chercher par client
+            Rechercher par client
           </FormLabel>
           <Box
             sx={{
@@ -251,7 +251,7 @@ export const InvoiceListSidebar: FC<InvoiceListSidebarProps> = (props) => {
               onChange={handleStatusChange}
             />
           }
-          label="Paid only"
+          label="Payé uniquement"
         />
         <FormControlLabel
           control={
@@ -260,7 +260,7 @@ export const InvoiceListSidebar: FC<InvoiceListSidebarProps> = (props) => {
               onChange={onGroupChange}
             />
           }
-          label="Group by status"
+          label="Regrouper par statut"
         />
       </Stack>
     </div>

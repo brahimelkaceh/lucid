@@ -1,116 +1,216 @@
-import type { FC } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { format } from 'date-fns';
+import { Formik, useFormik } from 'formik';
+import * as Yup from 'yup';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { Customer } from 'src/types/customer';
-
-const statusOptions = [
-  {
-    label: 'Canceled',
-    value: 'canceled',
-  },
-  {
-    label: 'Complete',
-    value: 'complete',
-  },
-  {
-    label: 'Pending',
-    value: 'pending',
-  },
-  {
-    label: 'Rejected',
-    value: 'rejected',
-  },
-];
+import { MobileDatePicker } from '@mui/x-date-pickers';
+import { MenuItem } from '@mui/material';
+import { Member } from 'src/types/members';
 
 interface MemberEditProps {
   onCancel?: () => void;
-  onSave?: () => void;
-  member: Customer;
+  onSave?: (id: string, values: Member) => void;
+  member: Member;
 }
 
-export const MemberEdit: FC<MemberEditProps> = (props) => {
-  const { onCancel, onSave, member } = props;
+type PaymentMethod = {
+  text: string;
+  value: number;
+};
 
-  //   const createdAt = format(member.createdAt, 'dd/MM/yyyy HH:mm');
+const methods: PaymentMethod[] = [
+  {
+    text: 'Chèque',
+    value: 1,
+  },
+  {
+    text: 'Virement',
+    value: 2,
+  },
+  {
+    text: 'Carte',
+    value: 3,
+  },
+  {
+    text: 'Espèce',
+    value: 4,
+  },
+];
+
+export const MemberEdit: React.FC<MemberEditProps> = ({ onCancel, onSave, member }) => {
+  const { values, handleChange, handleSubmit, setFieldValue, touched, errors } = useFormik({
+    initialValues: {
+      id: member.id,
+      full_name: member.full_name,
+      email: member.email,
+      rc_cin: member.rc_cin,
+      payment_method: member.payment_method,
+      amount: member.amount,
+      payment_date:
+        member.status === 'paid' ? member.payment_date && member.payment_date.toDate() : new Date(),
+      status: member.status,
+      updated_at: new Date(),
+    },
+    validationSchema: Yup.object({
+      full_name: Yup.string().required('Required'),
+      email: Yup.string().email('Invalid email').required('Required'),
+    }),
+    onSubmit: (formValues) => {
+      if (formValues.status == 'unpaid') {
+        formValues.payment_date = new Date(0);
+        formValues.amount = 0;
+        formValues.payment_method = null;
+      }
+      if (onSave) {
+        onSave(formValues.id, formValues);
+      }
+    },
+  });
+
+  useEffect(() => {
+    setFieldValue('id', member.id);
+    setFieldValue('full_name', member.full_name);
+    setFieldValue('email', member.email);
+    setFieldValue('rc_cin', member.rc_cin);
+    setFieldValue('payment_method', member.payment_method);
+    setFieldValue('amount', member.amount);
+    setFieldValue(
+      'payment_date',
+      member.status === 'paid' ? member.payment_date && member.payment_date.toDate() : new Date()
+    );
+    setFieldValue('status', member.status);
+  }, [member]);
 
   return (
-    <Stack spacing={6}>
-      <Stack spacing={3}>
-        <Typography variant="h6">Détails</Typography>
+    <form onSubmit={handleSubmit}>
+      <Stack spacing={6}>
         <Stack spacing={3}>
-          <TextField
-            disabled
-            fullWidth
-            label="ID Membre"
-            name="id"
-            value={member.id}
-          />
-          <TextField
-            fullWidth
-            label="Nom et prénom"
-            name="number"
-            value={member.name}
-          />
-          <TextField
-            fullWidth
-            label="Registre de Commerce"
-            name="customer_name"
-            value={member.updatedAt}
-          />
-          <TextField
-            fullWidth
-            label="Moyen de paiement"
-            name="status"
-            select
-            SelectProps={{ native: true }}
-            value={member.city}
+          <Typography variant="h6">Détails</Typography>
+          <Stack spacing={3}>
+            <TextField
+              fullWidth
+              label="Nom et prénom"
+              name="full_name"
+              value={values.full_name}
+              onChange={handleChange}
+              error={touched.full_name && Boolean(errors.full_name)}
+              helperText={touched.full_name && errors.full_name}
+            />
+            <TextField
+              fullWidth
+              label="Email"
+              name="email"
+              value={values.email}
+              onChange={handleChange}
+              error={touched.email && Boolean(errors.email)}
+              helperText={touched.email && errors.email}
+            />
+            <TextField
+              fullWidth
+              label="Registre de Commerce"
+              name="rc_cin"
+              value={values.rc_cin}
+              onChange={handleChange}
+              error={touched.rc_cin && Boolean(errors.rc_cin)}
+              helperText={touched.rc_cin && errors.rc_cin}
+            />
+            <TextField
+              fullWidth
+              label="Status"
+              name="status"
+              select
+              SelectProps={{ native: true }}
+              value={values.status}
+              onChange={handleChange}
+              error={touched.status && Boolean(errors.status)}
+              helperText={touched.status && errors.status}
+            >
+              {['paid', 'unpaid'].map((statusOption) => (
+                <option
+                  key={statusOption}
+                  value={statusOption}
+                >
+                  {statusOption === 'paid' ? 'Payée' : 'Impayée'}
+                </option>
+              ))}
+            </TextField>
+            {values.status === 'paid' && (
+              <>
+                <TextField
+                  fullWidth
+                  label="Moyen de paiement"
+                  name="payment_method"
+                  select
+                  SelectProps={{
+                    native: true,
+                  }}
+                  value={values.payment_method}
+                  onChange={handleChange}
+                  error={touched.payment_method && Boolean(errors.payment_method)}
+                  helperText={touched.payment_method && errors.payment_method}
+                >
+                  <option value={''}>--</option>
+                  {methods.map((method) => (
+                    <option
+                      key={method.value}
+                      value={method.value}
+                    >
+                      {method.text}
+                    </option>
+                  ))}
+                </TextField>
+                <TextField
+                  fullWidth
+                  label="Montant"
+                  name="amount"
+                  value={values.amount}
+                  onChange={handleChange}
+                  error={touched.amount && Boolean(errors.amount)}
+                  helperText={touched.amount && errors.amount}
+                />
+                <MobileDatePicker
+                  label="Date de paiement"
+                  onChange={(newDate) => setFieldValue('payment_date', newDate)}
+                  value={values.payment_date}
+                />
+              </>
+            )}
+          </Stack>
+          <Stack
+            alignItems="center"
+            direction="row"
+            flexWrap="wrap"
+            spacing={2}
           >
-            <option value="1">method 1</option>
-            <option value="2">method 2</option>
-            <option value="3">method 3</option>
-            <option value="4">method 4</option>
-          </TextField>
-          <TextField
-            fullWidth
-            label="Montant"
-            name="date"
-            value={member.totalSpent}
-          />
-        </Stack>
-        <Stack
-          alignItems="center"
-          direction="row"
-          flexWrap="wrap"
-          spacing={2}
-        >
-          <Button
-            color="primary"
-            onClick={onSave}
-            size="small"
-            variant="contained"
-          >
-            Sauvegarder les modifications
-          </Button>
-          <Button
-            color="inherit"
-            onClick={onCancel}
-            size="small"
-          >
-            Annuler
-          </Button>
+            <Button
+              color="primary"
+              type="submit"
+              size="small"
+              variant="contained"
+            >
+              Sauvegarder
+            </Button>
+            <Button
+              color="error"
+              onClick={onCancel}
+              size="small"
+            >
+              Annuler
+            </Button>
+          </Stack>
         </Stack>
       </Stack>
-    </Stack>
+    </form>
   );
 };
 
 MemberEdit.propTypes = {
   onCancel: PropTypes.func,
   onSave: PropTypes.func,
-  // @ts-ignore
   member: PropTypes.object,
 };
+
+export default MemberEdit;

@@ -18,7 +18,7 @@ export interface Customer {
   state?: string;
   totalSpent?: number;
   totalOrders?: number;
-  updatedAt?: number;
+  updatedAt?: number | Date;
   vatRate?: number;
   zipCode?: string;
 }

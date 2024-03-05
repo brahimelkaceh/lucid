@@ -108,7 +108,7 @@ const statusOptions: Option[] = [
     value: 'pending',
   },
   {
-    label: 'Annulées',
+    label: 'IMPAYÉE',
     value: 'canceled',
   },
 ];
@@ -128,7 +128,7 @@ const getStatusPill = (invoiceStatus: InvoiceStatus): JSX.Element => {
   const map: Record<InvoiceStatus, { color: SeverityPillColor; text: string }> = {
     canceled: {
       color: 'error',
-      text: 'Annulées',
+      text: 'IMPAYÉE',
     },
     paid: {
       color: 'success',

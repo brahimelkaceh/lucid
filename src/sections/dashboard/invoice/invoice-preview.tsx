@@ -56,13 +56,6 @@ export const InvoicePreview: FC<InvoicePreviewProps> = (props) => {
         <div>
           <Typography
             align="right"
-            color="success.main"
-            variant="h4"
-          >
-            {invoice.status.toUpperCase()}
-          </Typography>
-          <Typography
-            align="right"
             variant="subtitle2"
           >
             {invoice.number}

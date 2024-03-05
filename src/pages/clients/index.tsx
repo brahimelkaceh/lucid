@@ -1,7 +1,6 @@
 import type { ChangeEvent, MouseEvent } from 'react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { NextPage } from 'next';
-import FilterFunnel01Icon from '@untitled-ui/icons-react/build/esm/FilterFunnel01';
 import PlusIcon from '@untitled-ui/icons-react/build/esm/Plus';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -9,54 +8,65 @@ import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import SvgIcon from '@mui/material/SvgIcon';
 import Typography from '@mui/material/Typography';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import type { Theme } from '@mui/material/styles/createTheme';
 
-import { invoicesApi } from 'src/api/invoices';
+import { ordersApi } from 'src/api/orders';
 import { Seo } from 'src/components/seo';
+import { useDialog } from 'src/hooks/use-dialog';
 import { useMounted } from 'src/hooks/use-mounted';
 import { usePageView } from 'src/hooks/use-page-view';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard';
-import { InvoiceListContainer } from 'src/sections/dashboard/invoice/invoice-list-container';
-import { InvoiceListSidebar } from 'src/sections/dashboard/invoice/invoice-list-sidebar';
-import { InvoiceListSummary } from 'src/sections/dashboard/invoice/invoice-list-summary';
-import { InvoiceListTable } from 'src/sections/dashboard/invoice/invoice-list-table';
-import type { Invoice, InvoiceStatus } from 'src/types/invoice';
-import Link from 'next/link';
-import { paths } from 'src/paths';
+import { OrderListContainer } from 'src/sections/dashboard/order/order-list-container';
+import type { Order } from 'src/types/order';
+import type { Customer } from 'src/types/customer';
+import { OrderListSearch } from './components/order-list-search';
+import { OrderListTable } from './components/order-list-table';
+import { OrderDrawer } from './components/order-drawer';
+import { customersApi } from 'src/api/customers';
+import { Container } from '@mui/material';
+import { Previewer } from 'src/sections/components/previewer';
+import NewMemberForm from 'src/sections/components/forms/new-member';
+import NewCustomerForm from 'src/sections/components/forms/new-customer';
 import { RouterLink } from 'src/components/router-link';
+import { paths } from 'src/paths';
 
 interface Filters {
-  customers?: string[];
-  endDate?: Date;
   query?: string;
-  startDate?: Date;
-  status?: InvoiceStatus;
+  status?: string;
 }
 
-interface InvoicesSearchState {
+type SortDir = 'asc' | 'desc';
+
+interface MemberSearchState {
   filters: Filters;
   page: number;
   rowsPerPage: number;
+  sortBy?: string;
+  sortDir?: SortDir;
 }
 
-const useInvoicesSearch = () => {
-  const [state, setState] = useState<InvoicesSearchState>({
+const useMembersSearch = () => {
+  const [state, setState] = useState<MemberSearchState>({
     filters: {
-      customers: [],
-      endDate: undefined,
-      query: '',
-      startDate: undefined,
+      query: undefined,
+      status: undefined,
     },
     page: 0,
     rowsPerPage: 5,
+    sortBy: 'createdAt',
+    sortDir: 'desc',
   });
 
   const handleFiltersChange = useCallback((filters: Filters): void => {
     setState((prevState) => ({
       ...prevState,
       filters,
-      page: 0,
+    }));
+  }, []);
+
+  const handleSortChange = useCallback((sortDir: SortDir): void => {
+    setState((prevState) => ({
+      ...prevState,
+      sortDir,
     }));
   }, []);
 
@@ -79,32 +89,33 @@ const useInvoicesSearch = () => {
 
   return {
     handleFiltersChange,
+    handleSortChange,
     handlePageChange,
     handleRowsPerPageChange,
     state,
   };
 };
 
-interface InvoicesStoreState {
-  invoices: Invoice[];
-  invoicesCount: number;
+interface MemberStoreState {
+  members: Customer[];
+  membersCount: number;
 }
 
-const useInvoicesStore = (searchState: InvoicesSearchState) => {
+const useMembersStore = (searchState: MemberSearchState) => {
   const isMounted = useMounted();
-  const [state, setState] = useState<InvoicesStoreState>({
-    invoices: [],
-    invoicesCount: 0,
+  const [state, setState] = useState<MemberStoreState>({
+    members: [],
+    membersCount: 0,
   });
 
-  const handleInvoicesGet = useCallback(async () => {
+  const handleOrdersGet = useCallback(async () => {
     try {
-      const response = await invoicesApi.getInvoices(searchState);
+      const response = await customersApi.getCustomers(searchState);
 
       if (isMounted()) {
         setState({
-          invoices: response.data,
-          invoicesCount: response.count,
+          members: response.data,
+          membersCount: response.count,
         });
       }
     } catch (err) {
@@ -114,7 +125,7 @@ const useInvoicesStore = (searchState: InvoicesSearchState) => {
 
   useEffect(
     () => {
-      handleInvoicesGet();
+      handleOrdersGet();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [searchState]
@@ -125,34 +136,46 @@ const useInvoicesStore = (searchState: InvoicesSearchState) => {
   };
 };
 
+const useCurrentOrder = (members: Customer[], memberId?: string): Customer | undefined => {
+  return useMemo((): Customer | undefined => {
+    if (!memberId) {
+      return undefined;
+    }
+
+    return members.find((member) => member.id === memberId);
+  }, [members, memberId]);
+};
+
 const Page: NextPage = () => {
   const rootRef = useRef<HTMLDivElement | null>(null);
-  const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
-  const invoicesSearch = useInvoicesSearch();
-  const invoicesStore = useInvoicesStore(invoicesSearch.state);
-  const [group, setGroup] = useState<boolean>(true);
-  const [openSidebar, setOpenSidebar] = useState<boolean>(lgUp);
+  const membersSearch = useMembersSearch();
+  const membersStore = useMembersStore(membersSearch.state);
+  const dialog = useDialog<string>();
+  const currentOrder = useCurrentOrder(membersStore.members, dialog.data);
 
   usePageView();
 
-  const handleGroupChange = useCallback((event: ChangeEvent<HTMLInputElement>): void => {
-    setGroup(event.target.checked);
-  }, []);
+  const handleOrderOpen = useCallback(
+    (orderId: string): void => {
+      // Close drawer if is the same order
 
-  const handleFiltersToggle = useCallback((): void => {
-    setOpenSidebar((prevState) => !prevState);
-  }, []);
+      if (dialog.open && dialog.data === orderId) {
+        dialog.handleClose();
+        return;
+      }
 
-  const handleFiltersClose = useCallback((): void => {
-    setOpenSidebar(false);
-  }, []);
+      dialog.handleOpen(orderId);
+    },
+    [dialog]
+  );
 
   return (
     <>
-      <Seo title=" Factures" />
+      <Seo title="Revenus: Gestion Clients" />
       <Divider />
       <Box
         component="main"
+        ref={rootRef}
         sx={{
           display: 'flex',
           flex: '1 1 auto',
@@ -171,68 +194,57 @@ const Page: NextPage = () => {
             top: 0,
           }}
         >
-          <InvoiceListSidebar
-            container={rootRef.current}
-            filters={invoicesSearch.state.filters}
-            group={group}
-            onFiltersChange={invoicesSearch.handleFiltersChange}
-            onClose={handleFiltersClose}
-            onGroupChange={handleGroupChange}
-            open={openSidebar}
-          />
-          <InvoiceListContainer open={openSidebar}>
-            <Stack spacing={4}>
+          <OrderListContainer open={dialog.open}>
+            <Box sx={{ p: 3 }}>
               <Stack
                 alignItems="flex-start"
                 direction="row"
                 justifyContent="space-between"
-                spacing={3}
+                spacing={4}
+                sx={{ mx: 5 }}
               >
                 <div>
-                  <Typography variant="h4">Factures</Typography>
+                  <Typography variant="h4">Gestion clients</Typography>
                 </div>
-                <Stack
-                  alignItems="center"
-                  direction="row"
-                  spacing={1}
+                <Button
+                  component={RouterLink}
+                  href={paths.dashboard.clients.create}
+                  startIcon={
+                    <SvgIcon>
+                      <PlusIcon />
+                    </SvgIcon>
+                  }
+                  variant="contained"
                 >
-                  <Button
-                    color="inherit"
-                    startIcon={
-                      <SvgIcon>
-                        <FilterFunnel01Icon />
-                      </SvgIcon>
-                    }
-                    onClick={handleFiltersToggle}
-                  >
-                    Recherche
-                  </Button>
-                  <Button
-                    component={RouterLink}
-                    href={paths.dashboard.clients.create}
-                    startIcon={
-                      <SvgIcon>
-                        <PlusIcon />
-                      </SvgIcon>
-                    }
-                    variant="contained"
-                  >
-                    Créer
-                  </Button>
-                </Stack>
+                  Nouveau
+                </Button>
               </Stack>
-              <InvoiceListSummary />
-              <InvoiceListTable
-                count={invoicesStore.invoicesCount}
-                group={group}
-                items={invoicesStore.invoices}
-                onPageChange={invoicesSearch.handlePageChange}
-                onRowsPerPageChange={invoicesSearch.handleRowsPerPageChange}
-                page={invoicesSearch.state.page}
-                rowsPerPage={invoicesSearch.state.rowsPerPage}
-              />
-            </Stack>
-          </InvoiceListContainer>
+            </Box>
+            <Divider />
+
+            <OrderListSearch
+              onFiltersChange={membersSearch.handleFiltersChange}
+              onSortChange={membersSearch.handleSortChange}
+              sortBy={membersSearch.state.sortBy}
+              sortDir={membersSearch.state.sortDir}
+            />
+            <Divider />
+            <OrderListTable
+              count={membersStore.membersCount}
+              items={membersStore.members}
+              onPageChange={membersSearch.handlePageChange}
+              onRowsPerPageChange={membersSearch.handleRowsPerPageChange}
+              onSelect={handleOrderOpen}
+              page={membersSearch.state.page}
+              rowsPerPage={membersSearch.state.rowsPerPage}
+            />
+          </OrderListContainer>
+          <OrderDrawer
+            container={rootRef.current}
+            onClose={dialog.handleClose}
+            open={dialog.open}
+            member={currentOrder}
+          />
         </Box>
       </Box>
     </>

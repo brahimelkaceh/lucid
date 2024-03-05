@@ -1,17 +1,19 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Upload01Icon from '@untitled-ui/icons-react/build/esm/Upload01';
-import { Autocomplete, Stack } from '@mui/material';
-import { fileManagerApi } from 'src/api/file-manager';
-import SvgIcon from '@mui/material/SvgIcon';
-import { FileUploader } from 'src/sections/dashboard/file-manager/file-uploader';
-import { useSettings } from 'src/hooks/use-settings';
-import { useDialog } from 'src/hooks/use-dialog';
-import { log } from 'console';
+import { Autocomplete, FormControl, InputLabel, MenuItem, Select, Stack } from '@mui/material';
 import { MobileDatePicker } from '@mui/x-date-pickers';
+import FirebaseProjects from 'src/firebaseServices/projets';
+import * as yup from 'yup';
+import { useFormik } from 'formik';
+import { slice } from 'src/types/slice';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/router';
+import { paths } from 'src/paths';
+import FirebaseSlices from 'src/firebaseServices/tranches';
 
 interface NewInstallmentProps {
   onSubmit: (formData: NewInstallmentData) => void;
@@ -19,127 +21,105 @@ interface NewInstallmentProps {
 
 type Option = {
   text: string;
-  value: number;
+  value: string;
 };
-
-const projects: Option[] = [
-  { text: 'project id 1', value: 1 },
-  { text: 'project id 2', value: 2 },
-  { text: 'project id 3', value: 3 },
-  { text: 'project id 4', value: 4 },
-  { text: 'project id 5', value: 5 },
-];
 
 type PaymentMethod = {
   text: string;
   value: number;
 };
 
-const methods: PaymentMethod[] = [
-  {
-    text: 'method 1',
-    value: 1,
-  },
-  {
-    text: 'method 2',
-    value: 2,
-  },
-];
-
 interface NewInstallmentData {
   paymentAmount: string;
   paymentMethod: PaymentMethod | null;
   selectedProject: Option | null;
 }
-
+const validationSchema = yup.object({
+  amount: yup.number().min(1, 'Montant est requis'),
+});
 const NewInstallment: FC<NewInstallmentProps> = ({ onSubmit }) => {
-  const [paymentAmount, setPaymentAmount] = useState<string>('');
-  const [selectedProject, setSelectedProject] = useState<Option | null>(null);
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | null>(null);
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
+  const [projects, setProjects] = useState<Option[]>([]);
 
-  const uploadDialog = useDialog();
+  const firebaseNewSlice = new FirebaseSlices();
+  const router = useRouter();
 
-  const handlepaymentAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPaymentAmount(event.target.value);
-  };
-
-  const handlepaymentMethodChange = (event: React.ChangeEvent<{}>, value: PaymentMethod | null) => {
-    setPaymentMethod(value);
-  };
-
-  const handleProjectChange = (event: React.ChangeEvent<{}>, value: Option | null) => {
-    setSelectedProject(value);
-  };
-
-  const handleFileUpload = (files: File[]) => {
-    setSelectedFiles(files);
-  };
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    // Create a FormData object
-    const completeFormData = new FormData();
-    completeFormData.append('paymentAmount', paymentAmount);
-    completeFormData.append('paymentMethod', paymentMethod?.value.toString() || '');
-    completeFormData.append('selectedProject', selectedProject?.value.toString() || '');
-
-    // Append files to the FormData object
-    selectedFiles.forEach((file, index) => {
-      completeFormData.append(`file${index + 1}`, file);
-    });
+  const handleProjectsGet = async () => {
+    const firebaseProjects = new FirebaseProjects();
 
     try {
-      // Send FormData to the server for processing (adjust the endpoint accordingly)
-      // const response = await fileManagerApi.uploadFiles(completeFormData);
-
-      // Handle the server response as needed
-      // console.log('Server response:', response);
-
-      // Continue with form submission if needed
-      const formData: NewInstallmentData = {
-        paymentAmount,
-        paymentMethod,
-        selectedProject,
-      };
-
-      console.log(formData);
-
-      onSubmit(formData);
-    } catch (error) {
-      console.error('Upload failed:', error);
+      const response = await firebaseProjects.getProjectsIdAndName();
+      setProjects(response.map(({ id, project_name }) => ({ text: project_name, value: id })));
+    } catch (err) {
+      console.error(err);
     }
   };
 
+  useEffect(() => {
+    handleProjectsGet();
+  }, []);
+
+  const formik = useFormik({
+    initialValues: {
+      project_id: '',
+      amount: 0,
+      received_date: new Date(),
+      created_at: new Date(),
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values, { setSubmitting, resetForm }) => {
+      const { project_id, ...sliceData } = values;
+      try {
+        // Handle form submission
+        await firebaseNewSlice.createSlice(project_id, sliceData as unknown as slice);
+        toast.success('Tranche créé avec succès !');
+        router.replace(paths.dashboard.projets.index);
+        resetForm();
+      } catch (error) {
+        toast.error('Erreur lors de la création du tranche!');
+        console.error('Erreur lors de la création du tranche!: ', error);
+      } finally {
+        // Set isSubmitting back to false after the submission is complete
+        setSubmitting(false);
+      }
+    },
+  });
+
   return (
     <Box sx={{ p: 3 }}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={formik.handleSubmit}>
         <Grid
           container
-          spacing={1}
+          spacing={3}
         >
           <Grid
             item
             xs={12}
             md={12}
           >
-            <Autocomplete
-              getOptionLabel={(option: Option) => option.text}
-              options={projects}
-              onChange={handleProjectChange}
-              value={selectedProject}
-              renderInput={(params): JSX.Element => (
-                <TextField
-                  {...params}
-                  fullWidth
-                  label="ID PROJET"
-                  name="projectId"
-                  size="small"
-                />
-              )}
-            />
+            <FormControl
+              variant="outlined"
+              fullWidth
+            >
+              <InputLabel id="demo-simple-select-label">sélectionner un projet</InputLabel>
+
+              <Select
+                labelId="demo-simple-select-label"
+                size="small"
+                label="sélectionner un projet"
+                onChange={formik.handleChange}
+                value={formik.values.project_id}
+                name="project_id"
+              >
+                {projects.map((project) => (
+                  <MenuItem
+                    value={project.value}
+                    key={project.value}
+                  >
+                    {project.text}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Grid>
           <Grid
             item
@@ -148,12 +128,16 @@ const NewInstallment: FC<NewInstallmentProps> = ({ onSubmit }) => {
           >
             <TextField
               fullWidth
-              label="Mont. Versement"
-              name="paymentAmount"
+              label="Montant"
+              name="amount"
+              type="number"
               required
               size="small"
-              value={paymentAmount}
-              onChange={handlepaymentAmountChange}
+              value={formik.values.amount}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.amount && Boolean(formik.errors.amount)}
+              helperText={formik.touched.amount && formik.errors.amount}
             />
           </Grid>
           <Grid
@@ -163,53 +147,10 @@ const NewInstallment: FC<NewInstallmentProps> = ({ onSubmit }) => {
           >
             <MobileDatePicker
               label="Reçu le"
-              onChange={(newDate) => setStartDate(newDate)}
-              value={startDate}
+              onChange={(newDate) => formik.setFieldValue('received_date', newDate)}
+              value={formik.values.received_date}
             />
           </Grid>
-          {/* <Grid
-            item
-            xs={12}
-            md={12}
-          >
-            <Autocomplete
-              getOptionLabel={(option: PaymentMethod) => option.text}
-              options={methods}
-              onChange={handlepaymentMethodChange}
-              value={paymentMethod}
-              renderInput={(params): JSX.Element => (
-                <TextField
-                  {...params}
-                  fullWidth
-                  label="Payment Method"
-                  name="paymentMethod"
-                />
-              )}
-            />
-          </Grid> */}
-          {/* <Grid
-            item
-            xs={12}
-            md={12}
-          >
-            <Stack
-              alignItems="center"
-              direction="row"
-              spacing={2}
-            >
-              <Button
-                onClick={uploadDialog.handleOpen}
-                startIcon={
-                  <SvgIcon>
-                    <Upload01Icon />
-                  </SvgIcon>
-                }
-                variant="contained"
-              >
-                Upload
-              </Button>
-            </Stack>
-          </Grid> */}
         </Grid>
         <Box sx={{ mt: 2 }}>
           <Button
@@ -220,11 +161,6 @@ const NewInstallment: FC<NewInstallmentProps> = ({ onSubmit }) => {
           </Button>
         </Box>
       </form>
-      <FileUploader
-        onClose={uploadDialog.handleClose}
-        onUpload={handleFileUpload}
-        open={uploadDialog.open}
-      />
     </Box>
   );
 };

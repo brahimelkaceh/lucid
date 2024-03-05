@@ -56,7 +56,7 @@ const NewCustomerForm: FC<NewCustomerFormProps> = ({ onSubmit }) => {
       <form onSubmit={handleSubmit}>
         <Grid
           container
-          spacing={1}
+          spacing={3}
         >
           <Grid
             item
@@ -71,6 +71,22 @@ const NewCustomerForm: FC<NewCustomerFormProps> = ({ onSubmit }) => {
               size="small"
               value={fullName}
               onChange={handleFullNameChange}
+            />
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            md={12}
+          >
+            <TextField
+              fullWidth
+              label="Numéro de téléphone"
+              name="billingId"
+              type="tel"
+              required
+              size="small"
+              value={billingId}
+              onChange={handleBillingIdChange}
             />
           </Grid>
           <Grid
@@ -104,28 +120,13 @@ const NewCustomerForm: FC<NewCustomerFormProps> = ({ onSubmit }) => {
               onChange={handleAddressChange}
             />
           </Grid>
-          <Grid
-            item
-            xs={12}
-            md={12}
-          >
-            <TextField
-              fullWidth
-              label="ID Facturation"
-              name="billingId"
-              required
-              size="small"
-              value={billingId}
-              onChange={handleBillingIdChange}
-            />
-          </Grid>
         </Grid>
         <Box sx={{ mt: 2 }}>
           <Button
             type="submit"
             variant="contained"
           >
-            Créer un client
+            Créer
           </Button>
         </Box>
       </form>

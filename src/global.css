@@ -28,3 +28,6 @@
 
 /* Remove if mapbox is not used */
 @import '~mapbox-gl/dist/mapbox-gl.css';
+.css-jn4zf3-MuiInputBase-input-MuiFilledInput-input {
+  padding-bottom: 0 !important;
+}

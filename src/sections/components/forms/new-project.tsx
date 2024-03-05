@@ -7,25 +7,24 @@ import SvgIcon from '@mui/material/SvgIcon';
 import PlusIcon from '@untitled-ui/icons-react/build/esm/Plus';
 import Chip from '@mui/material/Chip';
 import { Grid, Stack, Typography } from '@mui/material';
+import * as yup from 'yup';
+import { useFormik } from 'formik';
+import FirebaseProjects from 'src/firebaseServices/projets';
+import { Project } from 'src/types/project';
+import toast from 'react-hot-toast';
+import { paths } from 'src/paths';
+import { useRouter } from 'next/router';
 
-interface NewProjectProps {
-  onSubmit: (formData: FormData) => void;
-}
+const firebaseNewProject = new FirebaseProjects();
 
-interface FormData {
-  projectId: string;
-  financialBackers: string[];
-  beneficiaries: string[];
-  total: number | '';
-}
-
-const NewProject: FC<NewProjectProps> = ({ onSubmit }) => {
-  const [projectId, setProjectId] = useState<string>('');
+const validationSchema = yup.object({
+  project_name: yup.string().required('Nom projet est requis'),
+});
+const NewProject = () => {
   const [financialBackersInput, setFinancialBackersInput] = useState<string>('');
   const [financialBackersList, setFinancialBackersList] = useState<string[]>([]);
   const [beneficiaryInput, setBeneficiaryInput] = useState<string>('');
   const [beneficiaryList, setBeneficiaryList] = useState<string[]>([]);
-  const [total, setTotal] = useState<number | ''>(''); // Type number or empty string
 
   const handleFinancialBackersInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFinancialBackersInput(event.target.value);
@@ -61,49 +60,77 @@ const NewProject: FC<NewProjectProps> = ({ onSubmit }) => {
     setBeneficiaryList(updatedList);
   };
 
-  const handleTotalChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = event.target.value;
-    // Convert the input value to a number or set to an empty string if not a valid number
-    const newValue: number | '' = /^\d+$/.test(inputValue) ? Number(inputValue) : '';
+  const router = useRouter();
 
-    setTotal(newValue);
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    // Create an object with the form data
-    const formData: FormData = {
-      projectId,
-      financialBackers: financialBackersList,
+  const formik = useFormik({
+    initialValues: {
+      project_name: '',
+      amount: 0,
+      email: '',
       beneficiaries: beneficiaryList,
-      total,
-    };
-    // Log the form data to the console
-    console.log(formData);
-    // Call the onSubmit callback with the form data
-    onSubmit(formData);
-  };
+      financial_backer: financialBackersList,
+      created_at: new Date(),
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values, { setSubmitting, resetForm }) => {
+      formik.values.beneficiaries = beneficiaryList;
+      formik.values.financial_backer = financialBackersList;
 
+      try {
+        // Handle form submission
+        await firebaseNewProject.createProject(values as unknown as Project);
+        toast.success('Projet créé avec succès !');
+        router.replace(paths.dashboard.projets.index);
+        resetForm();
+        setBeneficiaryList([]);
+        setFinancialBackersList([]);
+      } catch (error) {
+        toast.error('Erreur lors de la création du projet!');
+        console.error('Erreur lors de la création du projet!: ', error);
+      } finally {
+        setSubmitting(false);
+      }
+    },
+  });
   return (
     <Box sx={{ p: 3 }}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={formik.handleSubmit}>
         <Grid
           container
-          spacing={1}
+          spacing={4}
         >
           <Grid
             item
             xs={12}
-            md={12}
+            md={6}
           >
             <TextField
               fullWidth
-              label="ID PROJET"
-              name="projectId"
+              label="Nom Projet"
+              name="project_name"
               required
               size="small"
-              value={projectId}
-              onChange={(event) => setProjectId(event.target.value)}
+              value={formik.values.project_name}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.project_name && Boolean(formik.errors.project_name)}
+              helperText={formik.touched.project_name && formik.errors.project_name}
+            />
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            md={6}
+          >
+            <TextField
+              fullWidth
+              label="Email de contact"
+              name="email"
+              type="email"
+              size="small"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
             />
           </Grid>
           <Grid
@@ -118,8 +145,8 @@ const NewProject: FC<NewProjectProps> = ({ onSubmit }) => {
             >
               <TextField
                 fullWidth
-                label="BAILLEUR DE FOND"
-                name="financialBackers"
+                label="Bailleur de fond"
+                name="financial_backer"
                 size="small"
                 value={financialBackersInput}
                 onChange={handleFinancialBackersInputChange}
@@ -162,7 +189,7 @@ const NewProject: FC<NewProjectProps> = ({ onSubmit }) => {
             >
               <TextField
                 fullWidth
-                label="BÉNÉFICIAIRE"
+                label="Bénéficiare"
                 name="beneficiaries"
                 size="small"
                 value={beneficiaryInput}
@@ -201,12 +228,13 @@ const NewProject: FC<NewProjectProps> = ({ onSubmit }) => {
           >
             <TextField
               fullWidth
-              label="MONTANT GLOBAL"
-              name="total"
+              label="Montant Global"
+              name="amount"
               type="number"
               size="small"
-              value={total}
-              onChange={handleTotalChange}
+              value={formik.values.amount}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
             />
           </Grid>
         </Grid>
@@ -214,8 +242,9 @@ const NewProject: FC<NewProjectProps> = ({ onSubmit }) => {
           <Button
             type="submit"
             variant="contained"
+            disabled={formik.isSubmitting}
           >
-            Créer un projet
+            {formik.isSubmitting ? 'Création en cours...' : 'Créer un projet'}
           </Button>
         </Box>
       </form>

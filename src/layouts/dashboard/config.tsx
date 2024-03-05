@@ -129,10 +129,10 @@ export const useSections = () => {
               </SvgIcon>
             ),
             items: [
-              {
-                title: t(tokens.nav.add_ressource),
-                path: paths.dashboard.revenus.index,
-              },
+              // {
+              //   title: t(tokens.nav.add_ressource),
+              //   path: paths.dashboard.revenus.index,
+              // },
               {
                 title: t(tokens.nav.projects_management),
                 path: paths.dashboard.projets.index,
@@ -142,10 +142,16 @@ export const useSections = () => {
                 title: t(tokens.nav.members_management),
                 path: paths.dashboard.membres.index,
               },
+
               {
                 title: t(tokens.nav.clients_management),
                 path: paths.dashboard.clients.index,
               },
+              {
+                title: t(tokens.nav.invoices_management),
+                path: paths.dashboard.invoices.index,
+              },
+
               // {
               //   title: t(tokens.nav.details),
               //   path: paths.dashboard.revenus.details,
@@ -363,135 +369,61 @@ export const useSections = () => {
           },
         ],
       },
-      // {
-      //   subheader: t(tokens.nav.pages),
-      //   items: [
-      //     {
-      //       title: t(tokens.nav.auth),
-      //       icon: (
-      //         <SvgIcon fontSize="small">
-      //           <Lock01Icon />
-      //         </SvgIcon>
-      //       ),
-      //       items: [
-      //         {
-      //           title: t(tokens.nav.login),
-      //           items: [
-      //             {
-      //               title: 'Classic',
-      //               path: paths.authDemo.login.classic,
-      //             },
-      //             {
-      //               title: 'Modern',
-      //               path: paths.authDemo.login.modern,
-      //             },
-      //           ],
-      //         },
-      //         {
-      //           title: t(tokens.nav.register),
-      //           items: [
-      //             {
-      //               title: 'Classic',
-      //               path: paths.authDemo.register.classic,
-      //             },
-      //             {
-      //               title: 'Modern',
-      //               path: paths.authDemo.register.modern,
-      //             },
-      //           ],
-      //         },
-      //         {
-      //           title: t(tokens.nav.forgotPassword),
-      //           items: [
-      //             {
-      //               title: 'Classic',
-      //               path: paths.authDemo.forgotPassword.classic,
-      //             },
-      //             {
-      //               title: 'Modern',
-      //               path: paths.authDemo.forgotPassword.modern,
-      //             },
-      //           ],
-      //         },
-      //         {
-      //           title: t(tokens.nav.resetPassword),
-      //           items: [
-      //             {
-      //               title: 'Classic',
-      //               path: paths.authDemo.resetPassword.classic,
-      //             },
-      //             {
-      //               title: 'Modern',
-      //               path: paths.authDemo.resetPassword.modern,
-      //             },
-      //           ],
-      //         },
-      //         {
-      //           title: t(tokens.nav.verifyCode),
-      //           items: [
-      //             {
-      //               title: 'Classic',
-      //               path: paths.authDemo.verifyCode.classic,
-      //             },
-      //             {
-      //               title: 'Modern',
-      //               path: paths.authDemo.verifyCode.modern,
-      //             },
-      //           ],
-      //         },
-      //       ],
-      //     },
-      //     {
-      //       title: t(tokens.nav.pricing),
-      //       path: paths.pricing,
-      //       icon: (
-      //         <SvgIcon fontSize="small">
-      //           <CreditCard01Icon />
-      //         </SvgIcon>
-      //       ),
-      //     },
-      //     {
-      //       title: t(tokens.nav.checkout),
-      //       path: paths.checkout,
-      //       icon: (
-      //         <SvgIcon fontSize="small">
-      //           <LogOut01Icon />
-      //         </SvgIcon>
-      //       ),
-      //     },
-      //     {
-      //       title: t(tokens.nav.contact),
-      //       path: paths.contact,
-      //       icon: (
-      //         <SvgIcon fontSize="small">
-      //           <Mail04Icon />
-      //         </SvgIcon>
-      //       ),
-      //     },
-      //     {
-      //       title: t(tokens.nav.error),
-      //       icon: (
-      //         <SvgIcon fontSize="small">
-      //           <XSquareIcon />
-      //         </SvgIcon>
-      //       ),
-      //       items: [
-      //         {
-      //           title: '401',
-      //           path: paths.notAuthorized,
-      //         },
-      //         {
-      //           title: '404',
-      //           path: paths.notFound,
-      //         },
-      //         {
-      //           title: '500',
-      //           path: paths.serverError,
-      //         },
-      //       ],
-      //     },
-      //   ],
-      // },
+      {
+        subheader: 'Charge & Dépenses',
+        items: [
+          {
+            title: t(tokens.nav.salary),
+            path: paths.dashboard.salary.index,
+            icon: (
+              <SvgIcon fontSize="small">
+                <HomeSmileIcon />
+              </SvgIcon>
+            ),
+          },
+          {
+            title: t(tokens.nav.utilities),
+            path: paths.dashboard.utilities.index,
+            icon: (
+              <SvgIcon fontSize="small">
+                <HomeSmileIcon />
+              </SvgIcon>
+            ),
+          },
+          {
+            title: t(tokens.nav.achats),
+            path: paths.dashboard.achats.index,
+            icon: (
+              <SvgIcon fontSize="small">
+                <HomeSmileIcon />
+              </SvgIcon>
+            ),
+          },
+          {
+            title: t(tokens.nav.expenses),
+            path: paths.dashboard.expenses.index,
+            icon: (
+              <SvgIcon fontSize="small">
+                <HomeSmileIcon />
+              </SvgIcon>
+            ),
+          },
+        ],
+      },
+      {
+        subheader: 'Chash Management',
+        items: [
+          {
+            title: t(tokens.nav.cash),
+            path: paths.dashboard.cash.index,
+            icon: (
+              <SvgIcon fontSize="small">
+                <HomeSmileIcon />
+              </SvgIcon>
+            ),
+          },
+        ],
+      },
       // {
       //   subheader: 'Misc',
       //   items: [

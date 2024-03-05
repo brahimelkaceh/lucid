@@ -55,6 +55,12 @@ export const tokens = {
     add_ressource: 'nav.add_ressource',
     projects_management: 'nav.projects_management',
     clients_management: 'nav.clients_management',
+    invoices_management: 'nav.invoices_management',
     members_management: 'nav.members_management',
+    salary: 'nav.salary',
+    utilities: 'nav.utilities',
+    achats: 'nav.achats',
+    expenses: 'nav.expenses',
+    cash: 'nav.cash',
   },
 };

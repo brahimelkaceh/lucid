@@ -47,7 +47,7 @@ export const InvoiceListSummary: FC = () => (
                   color="text.secondary"
                   variant="body2"
                 >
-                  sur 12 factures
+                  Sur 12 factures
                 </Typography>
               </div>
             </Stack>
@@ -88,7 +88,7 @@ export const InvoiceListSummary: FC = () => (
                   color="text.secondary"
                   variant="body2"
                 >
-                  sur 3 factures
+                  3 factures
                 </Typography>
               </div>
             </Stack>
@@ -129,7 +129,7 @@ export const InvoiceListSummary: FC = () => (
                   color="text.secondary"
                   variant="body2"
                 >
-                  sur 2 factures
+                  2 factures
                 </Typography>
               </div>
             </Stack>

@@ -173,7 +173,7 @@ export const Table2: FC = () => (
                       spacing={1}
                     >
                       <Avatar src={project.author.avatar} />
-                      <Typography variant="subtitle2">{project.author.name}</Typography>
+                      <Typography variant="h3">{project.author.name}</Typography>
                     </Stack>
                   </TableCell>
                   <TableCell>{budget}</TableCell>

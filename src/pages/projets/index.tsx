@@ -1,119 +1,154 @@
+import type { ChangeEvent, MouseEvent } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { NextPage } from 'next';
-import { subDays, subHours } from 'date-fns';
+import Download01Icon from '@untitled-ui/icons-react/build/esm/Download01';
+import PlusIcon from '@untitled-ui/icons-react/build/esm/Plus';
+import Upload01Icon from '@untitled-ui/icons-react/build/esm/Upload01';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Unstable_Grid2';
 import Stack from '@mui/material/Stack';
+import SvgIcon from '@mui/material/SvgIcon';
 import Typography from '@mui/material/Typography';
 
 import { Seo } from 'src/components/seo';
+import { useMounted } from 'src/hooks/use-mounted';
 import { usePageView } from 'src/hooks/use-page-view';
-import { useSettings } from 'src/hooks/use-settings';
+import { useSelection } from 'src/hooks/use-selection';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard';
-import ProjectsTable from './components/projects-table';
+import { CustomerListSearch } from 'src/sections/dashboard/customer/customer-list-search';
+import { CustomerListTable } from 'src/sections/dashboard/customer/customer-list-table';
+import type { Customer } from 'src/types/customer';
+import { useSettings } from 'src/hooks/use-settings';
+import { ProjectListSearch } from './components/Project-list-search';
+import { ProjectListTable } from './components/project-list-table';
+import { paths } from 'src/paths';
+import { RouterLink } from 'src/components/router-link';
+import { Project } from 'src/types/project';
+import FirebaseProjects from 'src/firebaseServices/projets';
 
-const now = new Date();
-export interface Project {
-  id: string;
-  avatar: string;
-  city: string;
-  country: string;
-  currency: string;
-  email: string;
-  hasAcceptedMarketing: boolean;
-  isProspect: boolean;
-  isReturning: boolean;
-  name: string;
-  state: string;
-  totalSpent: number;
-  totalOrders: number;
-  updatedAt: number;
+interface Filters {
+  query?: string;
 }
 
-const projects: Project[] = [
-  {
-    id: '5e887ac47eed253091be10cb',
-    avatar: '/assets/avatars/avatar-carson-darrin.png',
-    city: 'Cleveland',
-    country: 'USA',
-    currency: '$',
-    email: 'carson.darrin@devias.io',
-    hasAcceptedMarketing: true,
-    isProspect: false,
-    isReturning: true,
-    name: 'Carson Darrin',
-    state: 'Ohio',
-    totalSpent: 300.0,
-    totalOrders: 3,
-    updatedAt: subDays(subHours(now, 7), 1).getTime(),
-  },
-  {
-    id: '5e887b209c28ac3dd97f6db5',
-    avatar: '/assets/avatars/avatar-fran-perez.png',
-    city: 'Atlanta',
-    country: 'USA',
-    currency: '$',
-    email: 'fran.perez@devias.io',
-    hasAcceptedMarketing: true,
-    isProspect: true,
-    isReturning: false,
-    name: 'Fran Perez',
-    state: 'Georgia',
-    totalSpent: 0.0,
-    totalOrders: 0,
-    updatedAt: subDays(subHours(now, 1), 2).getTime(),
-  },
-  {
-    id: '5e887b7602bdbc4dbb234b27',
-    avatar: '/assets/avatars/avatar-jie-yan-song.png',
-    city: 'North Canton',
-    country: 'USA',
-    currency: '$',
-    email: 'jie.yan.song@devias.io',
-    hasAcceptedMarketing: false,
-    isProspect: false,
-    isReturning: false,
-    name: 'Jie Yan Song',
-    state: 'Ohio',
-    totalSpent: 5600.0,
-    totalOrders: 6,
-    updatedAt: subDays(subHours(now, 4), 2).getTime(),
-  },
-  {
-    id: '5e86809283e28b96d2d38537',
-    avatar: '/assets/avatars/avatar-anika-visser.png',
-    city: 'Madrid',
-    country: 'Spain',
-    currency: '$',
-    email: 'anika.visser@devias.io',
-    hasAcceptedMarketing: true,
-    isProspect: false,
-    isReturning: true,
-    name: 'Anika Visser',
-    state: 'Madrid',
-    totalSpent: 500.0,
-    totalOrders: 1,
-    updatedAt: subDays(subHours(now, 11), 2).getTime(),
-  },
-  {
-    id: '5e86805e2bafd54f66cc95c3',
-    avatar: '/assets/avatars/avatar-miron-vitold.png',
-    city: 'San Diego',
-    country: 'USA',
-    currency: '$',
-    email: 'miron.vitold@devias.io',
-    hasAcceptedMarketing: true,
-    isProspect: true,
-    isReturning: false,
-    name: 'Miron Vitold',
-    totalSpent: 0.0,
-    totalOrders: 0,
-    state: 'California',
-    updatedAt: subDays(subHours(now, 7), 3).getTime(),
-  },
-];
+interface ProjectsSearchState {
+  filters: Filters;
+  page: number;
+  rowsPerPage: number;
+  sortBy: string;
+  sortDir: 'asc' | 'desc';
+}
+
+const useProjectsSearch = () => {
+  const [state, setState] = useState<ProjectsSearchState>({
+    filters: {
+      query: undefined,
+    },
+    page: 0,
+    rowsPerPage: 5,
+    sortBy: 'project_name',
+    sortDir: 'desc',
+  });
+
+  const handleFiltersChange = useCallback((filters: Filters): void => {
+    setState((prevState) => ({
+      ...prevState,
+      filters,
+    }));
+  }, []);
+
+  const handleSortChange = useCallback(
+    (sort: { sortBy: string; sortDir: 'asc' | 'desc' }): void => {
+      setState((prevState) => ({
+        ...prevState,
+        sortBy: sort.sortBy,
+        sortDir: sort.sortDir,
+      }));
+    },
+    []
+  );
+
+  const handlePageChange = useCallback(
+    (event: MouseEvent<HTMLButtonElement> | null, page: number): void => {
+      setState((prevState) => ({
+        ...prevState,
+        page,
+      }));
+    },
+    []
+  );
+
+  const handleRowsPerPageChange = useCallback((event: ChangeEvent<HTMLInputElement>): void => {
+    setState((prevState) => ({
+      ...prevState,
+      rowsPerPage: parseInt(event.target.value, 10),
+    }));
+  }, []);
+
+  return {
+    handleFiltersChange,
+    handleSortChange,
+    handlePageChange,
+    handleRowsPerPageChange,
+    state,
+  };
+};
+
+interface ProjectsStoreState {
+  projects: Project[];
+  projectsCount: number;
+}
+
+const useProjectsStore = (searchState: ProjectsSearchState) => {
+  const isMounted = useMounted();
+  const [state, setState] = useState<ProjectsStoreState>({
+    projects: [],
+    projectsCount: 0,
+  });
+
+  const handleProjectsGet = useCallback(async () => {
+    const firebaseProjects = new FirebaseProjects();
+
+    try {
+      const response = await firebaseProjects.getAllProjects(searchState);
+      console.log(response);
+
+      if (isMounted()) {
+        setState({
+          projects: response.projects,
+          projectsCount: response.count,
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, [searchState, isMounted]);
+
+  useEffect(
+    () => {
+      handleProjectsGet();
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [searchState]
+  );
+
+  return {
+    ...state,
+  };
+};
+
+const useProjectIds = (projects: Project[] = []) => {
+  return useMemo(() => {
+    return projects.map((project) => project.id);
+  }, [projects]);
+};
 
 const Page: NextPage = () => {
+  const projectsSearch = useProjectsSearch();
+  const projectsStore = useProjectsStore(projectsSearch.state);
+  const projectsIds = useProjectIds(projectsStore.projects);
+  const projectsSelection = useSelection<string>(projectsIds);
   const settings = useSettings();
 
   usePageView();
@@ -125,31 +160,72 @@ const Page: NextPage = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          py: 2,
+          py: 8,
         }}
       >
         <Container maxWidth={settings.stretch ? false : 'xl'}>
-          <Grid
-            container
-            disableEqualOverflow
-            spacing={{
-              xs: 3,
-              lg: 4,
-            }}
-          >
-            <Grid xs={12}>
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                spacing={1}
-              >
-                <div>
-                  <Typography variant="h4">Gestion projets</Typography>
-                </div>
+          <Stack spacing={4}>
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              spacing={4}
+            >
+              <Stack spacing={1}>
+                <Typography variant="h4">Gestion projets</Typography>
               </Stack>
-              <ProjectsTable projects={projects} />
-            </Grid>
-          </Grid>
+              <Stack
+                alignItems="center"
+                direction="row"
+                spacing={3}
+              >
+                <Button
+                  component={RouterLink}
+                  href={paths.dashboard.projets.create}
+                  startIcon={
+                    <SvgIcon>
+                      <PlusIcon />
+                    </SvgIcon>
+                  }
+                  variant="contained"
+                >
+                  Nouveau Projet
+                </Button>
+                <Button
+                  component={RouterLink}
+                  href={paths.dashboard.projets.tranche}
+                  startIcon={
+                    <SvgIcon>
+                      <PlusIcon />
+                    </SvgIcon>
+                  }
+                  variant="contained"
+                >
+                  Nouvelle Tranche
+                </Button>
+              </Stack>
+            </Stack>
+            <Card>
+              <ProjectListSearch
+                onFiltersChange={projectsSearch.handleFiltersChange}
+                onSortChange={projectsSearch.handleSortChange}
+                sortBy={projectsSearch.state.sortBy}
+                sortDir={projectsSearch.state.sortDir}
+              />
+              <ProjectListTable
+                count={projectsStore.projectsCount}
+                items={projectsStore.projects}
+                onDeselectAll={projectsSelection.handleDeselectAll}
+                onDeselectOne={projectsSelection.handleDeselectOne}
+                onPageChange={projectsSearch.handlePageChange}
+                onRowsPerPageChange={projectsSearch.handleRowsPerPageChange}
+                onSelectAll={projectsSelection.handleSelectAll}
+                onSelectOne={projectsSelection.handleSelectOne}
+                page={projectsSearch.state.page}
+                rowsPerPage={projectsSearch.state.rowsPerPage}
+                selected={projectsSelection.selected}
+              />
+            </Card>
+          </Stack>
         </Container>
       </Box>
     </>

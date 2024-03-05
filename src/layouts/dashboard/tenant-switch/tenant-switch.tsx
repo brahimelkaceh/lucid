@@ -40,7 +40,7 @@ export const TenantSwitch: FC<TenantSwitchProps> = (props) => {
             color="neutral.400"
             variant="body2"
           >
-            Production
+            Intuitive & accurate
           </Typography>
         </Box>
         {/* <IconButton

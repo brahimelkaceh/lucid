@@ -87,7 +87,8 @@ export const FileDropzone: FC<FileDropzoneProps> = (props) => {
               }}
               variant="h6"
             >
-              <span>Click to upload</span> or drag and drop
+              <span>Glisser ou parcourir</span>
+              {/* <span>Cliquez pour télécharger</span> Glisser ou parcourir */}
             </Typography>
             {caption && (
               <Typography
@@ -153,7 +154,7 @@ export const FileDropzone: FC<FileDropzoneProps> = (props) => {
               size="small"
               type="button"
             >
-              Remove All
+              Supprimer tout
             </Button>
             <Button
               onClick={onUpload}
@@ -161,7 +162,7 @@ export const FileDropzone: FC<FileDropzoneProps> = (props) => {
               type="button"
               variant="contained"
             >
-              Upload
+              Télécharger
             </Button>
           </Stack>
         </Box>

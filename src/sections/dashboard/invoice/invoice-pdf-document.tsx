@@ -151,7 +151,6 @@ export const InvoicePdfDocument: FC<InvoicePdfDocumentProps> = (props) => {
             <Text style={styles.h6}>www.devias.io</Text>
           </View>
           <View>
-            <Text style={[styles.h4, styles.uppercase, styles.colorSuccess]}>{invoice.status}</Text>
             <Text style={styles.subtitle2}>{invoice.number}</Text>
           </View>
         </View>
@@ -168,10 +167,6 @@ export const InvoicePdfDocument: FC<InvoicePdfDocumentProps> = (props) => {
           <View>
             <Text style={styles.body2}>Company No. 000000</Text>
             <Text style={styles.body2}>EU VAT No. 949 67545 45</Text>
-          </View>
-          <View>
-            <Text style={styles.body2}>accounts@devias.io</Text>
-            <Text style={styles.body2}>(+40) 652 3456 23</Text>
           </View>
         </View>
         <View style={styles.references}>

@@ -13,25 +13,33 @@ import { usePageView } from 'src/hooks/use-page-view';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard';
 import { paths } from 'src/paths';
 import { ProductCreateForm } from 'src/sections/dashboard/product/product-create-form';
-import { InvoiceCreateForm } from './components/invoice-create-from';
+
+import NewProject from 'src/sections/components/forms/new-project';
+import { Previewer } from 'src/sections/components/previewer';
+import { Card } from '@mui/material';
+import NewMemberForm from 'src/sections/components/forms/new-member';
+import NewCustomerForm from 'src/sections/components/forms/new-customer';
 
 const Page: NextPage = () => {
   usePageView();
-
+  const handleSubmit = () => {
+    // Handle form submission logic here
+    console.log('Form submitted successfully');
+  };
   return (
     <>
-      <Seo title="Dashboard: Product Create" />
+      <Seo title="Revenus: Nouveau Client" />
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8,
+          //   py: 8,
         }}
       >
-        <Container maxWidth="xl">
+        <Container maxWidth="lg">
           <Stack spacing={3}>
             <Stack spacing={1}>
-              <Typography variant="h4">Créer une nouvelle facture</Typography>
+              <Typography variant="h4">Créer un nouveau client</Typography>
               <Breadcrumbs separator={<BreadcrumbsSeparator />}>
                 <Link
                   color="text.primary"
@@ -39,17 +47,21 @@ const Page: NextPage = () => {
                   href={paths.dashboard.clients.index}
                   variant="subtitle2"
                 >
-                  Factures
+                  Gestion clients
                 </Link>
                 <Typography
                   color="text.secondary"
                   variant="subtitle2"
                 >
-                  Nouvelle facture
+                  Nouveau Client
                 </Typography>
               </Breadcrumbs>
             </Stack>
-            <InvoiceCreateForm />
+            <Container maxWidth="lg">
+              <Card>
+                <NewCustomerForm onSubmit={handleSubmit}></NewCustomerForm>
+              </Card>
+            </Container>
           </Stack>
         </Container>
       </Box>

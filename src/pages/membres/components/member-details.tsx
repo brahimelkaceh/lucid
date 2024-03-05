@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import PropTypes from 'prop-types';
-import { format } from 'date-fns';
+import { format, fromUnixTime } from 'date-fns';
 import numeral from 'numeral';
 import Edit02Icon from '@untitled-ui/icons-react/build/esm/Edit02';
 import Button from '@mui/material/Button';
@@ -22,22 +22,26 @@ import { SeverityPill } from 'src/components/severity-pill';
 import { Scrollbar } from 'src/components/scrollbar';
 import type { Order, OrderStatus } from 'src/types/order';
 import { Customer } from 'src/types/customer';
+import { Member, methods } from 'src/types/members';
+import { date } from 'yup';
 
 interface MemeberDetailsProps {
   onApprove?: () => void;
   onEdit?: () => void;
   onReject?: () => void;
-  member: Customer;
+  member: Member;
 }
-
+const getPaymentMethodText = (value: number | null | undefined): string => {
+  const method = methods.find((m) => m.value == value);
+  return method ? method.text : '--';
+};
 export const MemeberDetails: FC<MemeberDetailsProps> = (props) => {
   const { onApprove, onEdit, onReject, member } = props;
   const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
 
   const align = lgUp ? 'horizontal' : 'vertical';
-  //   const items = memeber.items || [];
-  //   const createdAt = format(memeber.createdAt, 'dd/MM/yyyy HH:mm');
-  //   const totalAmount = numeral(memeber.totalAmount).format(`${order.currency}0,0.00`);
+
+  const date = member.payment_date && format(member.payment_date?.toDate(), 'dd/MM/yyyy');
 
   return (
     <Stack spacing={6}>
@@ -48,9 +52,10 @@ export const MemeberDetails: FC<MemeberDetailsProps> = (props) => {
           justifyContent="space-between"
           spacing={3}
         >
-          <Typography variant="h6">détails</Typography>
+          <Typography variant="h6">Détails du membre</Typography>
           <Button
-            color="inherit"
+            color="warning"
+            variant="outlined"
             onClick={onEdit}
             size="small"
             startIcon={
@@ -59,7 +64,7 @@ export const MemeberDetails: FC<MemeberDetailsProps> = (props) => {
               </SvgIcon>
             }
           >
-            modifier
+            Modifier
           </Button>
         </Stack>
         <PropertyList>
@@ -67,82 +72,55 @@ export const MemeberDetails: FC<MemeberDetailsProps> = (props) => {
             align={align}
             disableGutters
             divider
-            label="ID Membre"
-            value={member.id}
+            label="Nom/Raison Sociale"
+            value={member.full_name}
           />
           <PropertyListItem
             align={align}
             disableGutters
             divider
-            label="Nom & prénom"
-            value={member.name}
+            label="Email"
+            value={member.email}
           />
           <PropertyListItem
             align={align}
             disableGutters
             divider
             label="Registre de Commerce"
-            value={member.updatedAt}
+            value={member.rc_cin}
           />
           <PropertyListItem
             align={align}
             disableGutters
             divider
             label="Moyen de paiement"
-            value={member.city}
+            value={getPaymentMethodText(member.payment_method)}
           ></PropertyListItem>
           <PropertyListItem
             align={align}
             disableGutters
             divider
             label="Montant"
-            value={'MAD ' + member.totalSpent}
+            value={'MAD ' + member.amount}
           />
+          <PropertyListItem
+            align={align}
+            disableGutters
+            divider
+            label="Reçu le"
+            value={member.status == 'paid' ? date ?? '' : '--'}
+          />
+          <PropertyListItem
+            align={align}
+            disableGutters
+            divider
+            label="Statut"
+          >
+            <SeverityPill color={member.status == 'paid' ? 'success' : 'error'}>
+              {member.status == 'paid' ? 'Payée' : 'Impayée'}
+            </SeverityPill>
+          </PropertyListItem>
         </PropertyList>
-        <Stack
-          alignItems="center"
-          direction="row"
-          flexWrap="wrap"
-          justifyContent="flex-end"
-          spacing={2}
-        >
-          <Button
-            onClick={onApprove}
-            size="small"
-            variant="contained"
-          >
-            Approuver
-          </Button>
-          <Button
-            color="error"
-            onClick={onReject}
-            size="small"
-            variant="outlined"
-          >
-            Rejeter
-          </Button>
-        </Stack>
-      </Stack>
-      <Stack spacing={3}>
-        <Typography variant="h6">Historique de paiements projets</Typography>
-        <Scrollbar>
-          <Table sx={{ minWidth: 400 }}>
-            <TableHead>
-              <TableRow>
-                <TableCell>Date</TableCell>
-                <TableCell>Billing Cycle</TableCell>
-                <TableCell>Amount</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </Scrollbar>
       </Stack>
     </Stack>
   );
