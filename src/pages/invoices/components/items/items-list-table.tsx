@@ -73,15 +73,15 @@ export const ItemsListTable: FC<ItemListTableProps> = (props) => {
   const handleProductDelete = useCallback((): void => {
     toast.error('Product cannot be deleted');
   }, []);
-  const calculateAmountForItems = () => {
-    const itemsWithAmount = items.map((item) => ({
-      ...item,
-      amount: itemsApi.calculateAmountForItem(item),
-    }));
-    setItemsWithAmount(itemsWithAmount);
-  };
 
   useEffect(() => {
+    const calculateAmountForItems = () => {
+      const itemsWithAmount = items.map((item) => ({
+        ...item,
+        amount: itemsApi.calculateAmountForItem(item),
+      }));
+      setItemsWithAmount(itemsWithAmount);
+    };
     calculateAmountForItems();
   }, [items]);
   return (
@@ -189,7 +189,7 @@ export const ItemsListTable: FC<ItemListTableProps> = (props) => {
                               md={12}
                               xs={12}
                             >
-                              <Typography variant="h6"> Modifier l'item</Typography>
+                              <Typography variant="h6"> {"Modifier l'item"}</Typography>
                               <Divider sx={{ my: 2 }} />
                               <Grid
                                 container

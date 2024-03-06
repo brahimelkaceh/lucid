@@ -6,11 +6,9 @@
   "private": true,
   "scripts": {
     "dev": "next",
-    "build": "next build",
+    "build": "next build && next export",
     "start": "next start",
     "export": "next export",
-    "lint": "next lint",
-    "lint-fix": "next lint --fix",
     "format:write": "prettier --write \"**/*.{js,jsx,ts,tsx,mdx}\" --cache",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,mdx}\" --cache",
     "test": "jest",

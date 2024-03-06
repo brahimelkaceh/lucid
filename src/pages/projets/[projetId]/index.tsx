@@ -50,11 +50,11 @@ interface SlicesData {
 }
 
 const useProject = (projectId: string): Project | null => {
-  const firebaseProjects = new FirebaseProjects();
   const isMounted = useMounted();
   const [project, setProject] = useState<Project | null>(null);
 
   const handleProjectGet = useCallback(async () => {
+    const firebaseProjects = new FirebaseProjects();
     try {
       const response = await firebaseProjects.getProjectById(projectId);
       if (isMounted()) {
@@ -63,23 +63,23 @@ const useProject = (projectId: string): Project | null => {
     } catch (error) {
       console.error('Error fetching project:', error);
     }
-  }, [firebaseProjects, projectId, isMounted]);
-
+  }, [projectId, isMounted]);
   useEffect(() => {
     handleProjectGet();
-  }, [projectId]);
+  }, [projectId, handleProjectGet]);
 
   return project;
 };
 
 const useSlices = (projectId: string) => {
-  const firebaseSlices = new FirebaseSlices();
   const isMounted = useMounted();
   const [slices, setSlices] = useState<slice[]>([]);
   const [totalSlicesAmounts, setTotalSlicesAmounts] = useState(0);
   const [loading, setLoading] = useState<boolean>(true);
 
   const handleSlicesGet = useCallback(async () => {
+    const firebaseSlices = new FirebaseSlices();
+
     try {
       setLoading(true);
       const response = await firebaseSlices.getAllSlices(projectId);
@@ -92,11 +92,11 @@ const useSlices = (projectId: string) => {
     } finally {
       setLoading(false);
     }
-  }, [firebaseSlices, projectId, isMounted]);
+  }, [projectId, isMounted]);
 
   useEffect(() => {
     handleSlicesGet();
-  }, [projectId]);
+  }, [projectId, handleSlicesGet]);
 
   const handleSliceDelete = useCallback(() => {
     handleSlicesGet();
@@ -113,8 +113,16 @@ const Page: NextPage = () => {
   const [currentTab, setCurrentTab] = useState<string>('details');
   const router = useRouter();
   const { projetId } = router.query;
-  const project = projetId ? useProject(projetId as string) : null;
-  const slicesData = projetId ? useSlices(projetId as string) : null;
+
+  // Ensure projetId is a string or an array of strings
+  const projectIds: string[] = Array.isArray(projetId) ? projetId : [projetId || ''];
+
+  // Assuming useProject expects a single string, you can take the first element
+  const projectIdToUse: string = projectIds[0] || '';
+
+  // Unconditionally call the hook
+  const project = useProject(projectIdToUse);
+  const slicesData = useSlices(Array.isArray(projetId) ? projetId[0] : projetId || '');
 
   usePageView();
 

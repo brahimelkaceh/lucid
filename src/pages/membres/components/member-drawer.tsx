@@ -15,6 +15,7 @@ import { MemberEdit } from './member-edit';
 import { Member } from 'src/types/members';
 import toast from 'react-hot-toast';
 import FirebaseMembers from 'src/firebaseServices/membres';
+
 interface MemberDrawerProps {
   container?: HTMLDivElement | null;
   open?: boolean;
@@ -34,20 +35,23 @@ export const MemberDrawer: FC<MemberDrawerProps> = (props) => {
   const handleEditCancel = useCallback(() => {
     setIsEditing(false);
   }, []);
-  const firebaseUpdateMember = new FirebaseMembers();
-  const handleSaveEdit = useCallback(async (id: string, values: {}) => {
-    try {
-      await firebaseUpdateMember.updateMember(id, values, onUpdateMember);
-      toast.success('Membre modifié avec succès !');
-      handleEditCancel();
-      if (onClose) {
-        onClose();
+  const handleSaveEdit = useCallback(
+    async (id: string, values: {}) => {
+      const firebaseUpdateMember = new FirebaseMembers();
+      try {
+        await firebaseUpdateMember.updateMember(id, values, onUpdateMember);
+        toast.success('Membre modifié avec succès !');
+        handleEditCancel();
+        if (onClose) {
+          onClose();
+        }
+      } catch (error) {
+        toast.error('Erreur lors de la modification du membre!');
+        console.error('Erreur lors de la modification du membre!: ', error);
       }
-    } catch (error) {
-      toast.error('Erreur lors de la modification du membre!');
-      console.error('Erreur lors de la modification du membre!: ', error);
-    }
-  }, []);
+    },
+    [handleEditCancel, onClose, onUpdateMember]
+  );
 
   let content: JSX.Element | null = null;
 

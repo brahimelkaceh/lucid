@@ -25,9 +25,6 @@ import { Divider } from '@mui/material';
 import { OrderListContainer } from 'src/sections/dashboard/order/order-list-container';
 import { ChangeEvent, MouseEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDialog } from 'src/hooks/use-dialog';
-import { OrderListSearch } from '../membres/components/member-list-search';
-import { OrderListTable } from '../membres/components/member-list-table';
-import { OrderDrawer } from '../membres/components/member-drawer';
 import { Customer } from 'src/types/customer';
 import { useMounted } from 'src/hooks/use-mounted';
 import { customersApi } from 'src/api/customers';
@@ -36,6 +33,7 @@ import { SalaryListTable } from './sections/salary-list-table';
 import { SalaryDrawer } from './sections/salary-drawer';
 import { RouterLink } from 'src/components/router-link';
 import { paths } from 'src/paths';
+
 interface Filters {
   query?: string;
   status?: string;

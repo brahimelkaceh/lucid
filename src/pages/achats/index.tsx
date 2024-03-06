@@ -26,9 +26,6 @@ import FilterFunnel01Icon from '@untitled-ui/icons-react/build/esm/FilterFunnel0
 import { OrderListContainer } from 'src/sections/dashboard/order/order-list-container';
 import { ChangeEvent, MouseEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDialog } from 'src/hooks/use-dialog';
-import { OrderListSearch } from '../membres/components/member-list-search';
-import { OrderListTable } from '../membres/components/member-list-table';
-import { OrderDrawer } from '../membres/components/member-drawer';
 import { Customer } from 'src/types/customer';
 import { useMounted } from 'src/hooks/use-mounted';
 import { customersApi } from 'src/api/customers';
@@ -37,6 +34,7 @@ import { PurchaseCreateForm } from './sections/create-purchase';
 import { paths } from 'src/paths';
 import { RouterLink } from 'src/components/router-link';
 import { BreadcrumbsSeparator } from 'src/components/breadcrumbs-separator';
+
 interface Filters {
   query?: string;
   status?: string;

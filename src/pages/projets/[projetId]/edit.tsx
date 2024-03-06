@@ -28,11 +28,11 @@ import { useRouter } from 'next/router';
 import { EditProject } from '../components/edit-projet';
 
 const useProject = (projectId: string): Project | null => {
-  const firebaseProjects = new FirebaseProjects();
   const isMounted = useMounted();
   const [project, setProject] = useState<Project | null>(null);
 
   const handleProjectGet = useCallback(async () => {
+    const firebaseProjects = new FirebaseProjects();
     try {
       const response = await firebaseProjects.getProjectById(projectId);
       if (isMounted()) {
@@ -41,11 +41,10 @@ const useProject = (projectId: string): Project | null => {
     } catch (error) {
       console.error('Error fetching project:', error);
     }
-  }, [firebaseProjects, projectId, isMounted]);
-
+  }, [projectId, isMounted]);
   useEffect(() => {
     handleProjectGet();
-  }, [projectId]);
+  }, [projectId, isMounted, handleProjectGet]);
 
   return project;
 };
@@ -53,7 +52,15 @@ const useProject = (projectId: string): Project | null => {
 const Page: NextPage = () => {
   const router = useRouter();
   const { projetId } = router.query;
-  const project = projetId ? useProject(projetId as string) : null;
+
+  // Ensure projetId is a string or an array of strings
+  const projectIds: string[] = Array.isArray(projetId) ? projetId : [projetId || ''];
+
+  // Assuming useProject expects a single string, you can take the first element
+  const projectIdToUse: string = projectIds[0] || '';
+
+  // Unconditionally call the hook
+  const project = useProject(projectIdToUse);
 
   usePageView();
 

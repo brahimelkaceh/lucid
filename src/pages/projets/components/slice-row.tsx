@@ -16,7 +16,6 @@ import { format } from 'date-fns';
 import { DatePicker } from '@mui/x-date-pickers';
 
 interface SliceRowProps {
-  key: string;
   slice: slice;
   projectId: string;
   onRefresh: () => void;
@@ -26,7 +25,7 @@ const validationSchema = yup.object({
   amount: yup.number().min(0, 'Montant est requis'),
   received_date: yup.date().required('date reçu est requis'),
 });
-const SliceRow: FC<SliceRowProps> = ({ key, slice, projectId, onRefresh, onUpdate }) => {
+const SliceRow: FC<SliceRowProps> = ({ slice, projectId, onRefresh, onUpdate }) => {
   const issueDate = slice.received_date ? format(slice.received_date.toDate(), 'MM/dd/yyyy') : '';
 
   const [editRowId, setEditRowId] = useState<string | null>(null);
@@ -46,7 +45,7 @@ const SliceRow: FC<SliceRowProps> = ({ key, slice, projectId, onRefresh, onUpdat
     },
     validationSchema: validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
-      values.amount = parseFloat(values.amount);
+      values.amount = values.amount * 1;
 
       const { id, ...sliceData } = values;
 

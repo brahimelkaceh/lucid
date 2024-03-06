@@ -14,6 +14,7 @@ import FirebaseProjects from 'src/firebaseServices/projets';
 import toast from 'react-hot-toast';
 import { paths } from 'src/paths';
 import { useRouter } from 'next/router';
+
 interface EditProjectProps {
   project: Project;
 }
@@ -107,7 +108,7 @@ export const EditProject: FC<EditProjectProps> = (props) => {
     setFieldValue('amount', project.amount);
     setFinancialBackersList(project.financial_backer);
     setBeneficiaryList(project.beneficiaries);
-  }, [project]);
+  }, [project, setFieldValue]);
   return (
     <>
       <UpdateConfirmationModal

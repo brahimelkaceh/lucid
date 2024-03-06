@@ -180,7 +180,7 @@ export const PurchaseListSidebar: FC<PurchaseListSidebarProps> = (props) => {
               mb: 2,
             }}
           >
-            Date d'émission
+            {"Date d'émission"}
           </FormLabel>
           <Stack spacing={2}>
             <DatePicker

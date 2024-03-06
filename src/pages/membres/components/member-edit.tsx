@@ -82,7 +82,7 @@ export const MemberEdit: React.FC<MemberEditProps> = ({ onCancel, onSave, member
       member.status === 'paid' ? member.payment_date && member.payment_date.toDate() : new Date()
     );
     setFieldValue('status', member.status);
-  }, [member]);
+  }, [member, setFieldValue]);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -210,7 +210,6 @@ export const MemberEdit: React.FC<MemberEditProps> = ({ onCancel, onSave, member
 MemberEdit.propTypes = {
   onCancel: PropTypes.func,
   onSave: PropTypes.func,
-  member: PropTypes.object,
 };
 
 export default MemberEdit;

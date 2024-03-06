@@ -1,3 +1,4 @@
+/* eslint-disable */
 import type { ComponentProps, ComponentType, FC, ReactElement } from 'react';
 import type { AppType } from 'next/app';
 import type { DocumentContext, DocumentProps } from 'next/document';

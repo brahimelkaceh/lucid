@@ -8,6 +8,7 @@ import SvgIcon from '@mui/material/SvgIcon';
 import Typography from '@mui/material/Typography';
 import { Dialog, Slide } from '@mui/material';
 import { TransitionProps } from '@mui/material/transitions';
+
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement<any, any>;

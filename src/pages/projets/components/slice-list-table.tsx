@@ -27,7 +27,8 @@ import { useRouter } from 'next/router';
 import { paths } from 'src/paths';
 import { useFormik } from 'formik';
 import SliceRow from './slice-row';
-import { LinearProgress } from '@mui/material';
+import { LinearProgress, Typography } from '@mui/material';
+
 interface SlicesListTableProps {
   slices?: slice[] | null;
   total?: number;

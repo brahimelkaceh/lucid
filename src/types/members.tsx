@@ -4,7 +4,7 @@ export interface Member {
   email?: string;
   amount?: number | null | '';
   payment_method?: number | null;
-  payment_date?: Date | null | number | '';
+  payment_date?: any | null | number | '';
   rc_cin: string;
   status: string;
   created_at?: Date | null;

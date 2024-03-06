@@ -134,7 +134,7 @@ interface itemsSearchState {
   rowsPerPage: number;
 }
 
-const useitemsSearch = () => {
+const useItemsSearch = () => {
   const [state, setState] = useState<itemsSearchState>({
     filters: {
       name: undefined,
@@ -222,7 +222,7 @@ export const InvoiceUpdateForm: FC = (props) => {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date());
   const [isSwitchOn, setSwitchOn] = useState(false);
-  const itemsSearch = useitemsSearch();
+  const itemsSearch = useItemsSearch();
   const itemsStore = useItemsStore(itemsSearch.state);
 
   // Function to handle switch state changes
