@@ -20,7 +20,6 @@ import NewInstallment from 'src/sections/components/forms/new-installment';
 import { SeverityPill } from 'src/components/severity-pill';
 import NewMemberForm from 'src/sections/components/forms/new-member';
 import NewSalary from 'src/sections/components/forms/new-salary';
-import Forms from './sections/forms';
 
 const Page: NextPage = () => {
   const handleSubmit = () => {
@@ -54,7 +53,6 @@ const Page: NextPage = () => {
               <Typography variant="h4">Masse salariale</Typography>
             </div>
           </Stack>
-          <Forms></Forms>
         </Container>
       </Box>
     </>

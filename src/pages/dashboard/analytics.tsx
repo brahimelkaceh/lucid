@@ -65,7 +65,7 @@ const Page: NextPage = () => {
             >
               <Container maxWidth="lg">
                 <Previewer title="New Project">
-                  <NewProject onSubmit={handleSubmit}></NewProject>
+                  <NewProject></NewProject>
                 </Previewer>
               </Container>
             </Grid>

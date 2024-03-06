@@ -26,7 +26,7 @@ const Transition = React.forwardRef(function Transition(
 
 interface DeleteConfirmationModalProps {
   isOpen: boolean;
-  onConfirm: (id: string) => void;
+  onConfirm: (id: string | undefined) => void;
   onCancel: () => void;
   message: string;
   id?: string;

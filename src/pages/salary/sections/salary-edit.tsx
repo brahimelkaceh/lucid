@@ -19,7 +19,7 @@ export const SalaryEdit: FC<SalaryEditProps> = (props) => {
   const { onCancel, onSave, member } = props;
 
   const dateFromTimestamp = member.updatedAt && toDate(member.updatedAt);
-  const [value, setValue] = useState<Date | null>(dateFromTimestamp);
+  // const [value, setValue] = useState<Date | null>(dateFromTimestamp ?? null);
 
   return (
     <Stack spacing={6}>
@@ -48,8 +48,8 @@ export const SalaryEdit: FC<SalaryEditProps> = (props) => {
           />
           <DatePicker
             label="Date de recrutement"
-            value={value} // Cast to DateValue
-            onChange={(newValue) => setValue(newValue)}
+            // value={value} // Cast to DateValue
+            // onChange={(newValue) => setValue(newValue)}
             format="dd/MM/yyyy"
           />
         </Stack>

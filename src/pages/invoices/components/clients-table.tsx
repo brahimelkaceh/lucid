@@ -22,11 +22,11 @@ import Edit02Icon from '@untitled-ui/icons-react/build/esm/Edit02';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { Scrollbar } from 'src/components/scrollbar';
 import numeral from 'numeral';
-import type { Client } from '../index';
 import { format } from 'date-fns';
+import { Invoice } from 'src/types/invoice';
 
 interface ClientsTableProps {
-  clients: Client[];
+  clients: Invoice[];
 }
 
 const ClientsTable: React.FC<ClientsTableProps> = ({ clients }) => {
@@ -65,7 +65,7 @@ const ClientsTable: React.FC<ClientsTableProps> = ({ clients }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {clients.map((client) => {
+              {/* {clients.map((client) => {
                 const location = `${client.city}, ${client.state}, ${client.country}`;
                 const date = format(client.updatedAt, 'dd MMM, yyyy');
 
@@ -113,7 +113,7 @@ const ClientsTable: React.FC<ClientsTableProps> = ({ clients }) => {
                     </TableCell>
                   </TableRow>
                 );
-              })}
+              })} */}
             </TableBody>
           </Table>
         </Scrollbar>

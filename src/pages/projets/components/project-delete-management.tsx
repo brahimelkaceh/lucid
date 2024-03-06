@@ -26,11 +26,11 @@ export const ProjectDeleteManage: FC<ProjectDeleteManageProps> = ({ projectId, .
     setDeleteModalOpen(false);
   };
   // Replace this with your actual delete function
-  const handleDelete = async (projectId: string) => {
+  const handleDelete = async (projectId: string | undefined) => {
     // Implement the delete logic here
     try {
       const firebaseDeleteProject = new FirebaseProjects();
-      await firebaseDeleteProject.deleteProject(projectId);
+      await firebaseDeleteProject.deleteProject(projectId ?? ' ');
       toast.success('Le project a été supprimé avec succès!');
       router.replace(paths.dashboard.projets.index);
     } catch (error) {
