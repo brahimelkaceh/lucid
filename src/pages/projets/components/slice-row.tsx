@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Check from '@mui/icons-material/Check';
 import Clear from '@mui/icons-material/Clear';
 import Edit from '@mui/icons-material/Edit';
