@@ -17,8 +17,6 @@ import { useMounted } from 'src/hooks/use-mounted';
 import { usePageView } from 'src/hooks/use-page-view';
 import { useSelection } from 'src/hooks/use-selection';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard';
-import { CustomerListSearch } from 'src/sections/dashboard/customer/customer-list-search';
-import { CustomerListTable } from 'src/sections/dashboard/customer/customer-list-table';
 import type { Customer } from 'src/types/customer';
 import { useSettings } from 'src/hooks/use-settings';
 import { ProjectListSearch } from './components/Project-list-search';

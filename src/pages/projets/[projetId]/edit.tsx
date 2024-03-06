@@ -17,7 +17,6 @@ import { useMounted } from 'src/hooks/use-mounted';
 import { usePageView } from 'src/hooks/use-page-view';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard';
 import { paths } from 'src/paths';
-import { CustomerEditForm } from 'src/sections/dashboard/customer/customer-edit-form';
 import type { Customer } from 'src/types/customer';
 import { getInitials } from 'src/utils/get-initials';
 import { Breadcrumbs, Card } from '@mui/material';
