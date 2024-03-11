@@ -16,6 +16,7 @@ import { Layout as DashboardLayout } from 'src/layouts/dashboard';
 import { EcommerceStats } from 'src/sections/dashboard/ecommerce/ecommerce-stats';
 import { EcommerceProducts } from 'src/sections/dashboard/ecommerce/ecommerce-products';
 import { DashboardStats } from 'src/sections/dashboard/ecommerce/dashboard-stats';
+import { Divider } from '@mui/material';
 
 const now = new Date();
 
@@ -52,6 +53,7 @@ const Page: NextPage = () => {
                   <Typography variant="h4">Gestion clients</Typography>
                 </div>
               </Stack>
+              <Divider />
             </Grid>
           </Grid>
         </Container>
