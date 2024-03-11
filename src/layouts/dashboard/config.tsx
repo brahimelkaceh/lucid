@@ -63,62 +63,9 @@ export const useSections = () => {
               </SvgIcon>
             ),
           },
-          // {
-          //   title: t(tokens.nav.project),
-          //   path: paths.project.index,
-          //   icon: (
-          //     <SvgIcon fontSize="small">
-          //       <HomeSmileIcon />
-          //     </SvgIcon>
-          //   ),
-          // },
-          // {
-          //   title: t(tokens.nav.analytics),
-          //   path: paths.dashboard.analytics,
-          //   icon: (
-          //     <SvgIcon fontSize="small">
-          //       <BarChartSquare02Icon />
-          //     </SvgIcon>
-          //   ),
-          // },
-          // {
-          //   title: t(tokens.nav.ecommerce),
-          //   path: paths.dashboard.ecommerce,
-          //   icon: (
-          //     <SvgIcon fontSize="small">
-          //       <LineChartUp04Icon />
-          //     </SvgIcon>
-          //   ),
-          // },
-          // {
-          //   title: t(tokens.nav.crypto),
-          //   path: paths.dashboard.crypto,
-          //   icon: (
-          //     <SvgIcon fontSize="small">
-          //       <CurrencyBitcoinCircleIcon />
-          //     </SvgIcon>
-          //   ),
-          //   label: (
-          //     <Chip
-          //       color="primary"
-          //       label="New"
-          //       size="small"
-          //     />
-          //   ),
-          // },
-          // {
-          //   title: t(tokens.nav.account),
-          //   path: paths.dashboard.account,
-          //   icon: (
-          //     <SvgIcon fontSize="small">
-          //       <HomeSmileIcon />
-          //     </SvgIcon>
-          //   ),
-          // },
         ],
       },
       {
-        // subheader: t(tokens.nav.concepts),
         items: [
           {
             title: t(tokens.nav.revenus),
@@ -129,10 +76,6 @@ export const useSections = () => {
               </SvgIcon>
             ),
             items: [
-              // {
-              //   title: t(tokens.nav.add_ressource),
-              //   path: paths.dashboard.revenus.index,
-              // },
               {
                 title: t(tokens.nav.projects_management),
                 path: paths.dashboard.projets.index,

@@ -41,9 +41,7 @@ const options: Option[] = [
                 height: 12,
                 width: 12,
               }}
-            >
-              <Logo />
-            </Box>
+            ></Box>
             <Box
               sx={{
                 backgroundColor: 'primary.main',
@@ -126,9 +124,7 @@ const options: Option[] = [
                 height: 12,
                 width: 12,
               }}
-            >
-              <Logo />
-            </Box>
+            ></Box>
             <Box
               sx={{
                 backgroundColor: 'primary.main',

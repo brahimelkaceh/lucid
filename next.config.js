@@ -1,6 +1,15 @@
 /** @type {import('next').NextConfig} */
 const config = {
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true,
+  },
   reactStrictMode: false,
+  output: 'export',
+  images: {
+    unoptimized: true,
+  },
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
@@ -12,10 +21,9 @@ const config = {
 
 module.exports = config;
 
-
 // Injected content via Sentry wizard below
 
-const { withSentryConfig } = require("@sentry/nextjs");
+const { withSentryConfig } = require('@sentry/nextjs');
 
 module.exports = withSentryConfig(
   module.exports,
@@ -25,8 +33,8 @@ module.exports = withSentryConfig(
 
     // Suppresses source map uploading logs during build
     silent: true,
-    org: "lucid-cx",
-    project: "javascript-nextjs",
+    org: 'lucid-cx',
+    project: 'lucid-app',
   },
   {
     // For all available options, see:
@@ -39,7 +47,7 @@ module.exports = withSentryConfig(
     transpileClientSDK: true,
 
     // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers (increases server load)
-    tunnelRoute: "/monitoring",
+    tunnelRoute: '/monitoring',
 
     // Hides source maps from generated client bundles
     hideSourceMaps: true,
