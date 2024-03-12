@@ -77,9 +77,7 @@ export const Layout: FC<LayoutProps> = (props) => {
                     color: 'primary.main',
                   },
                 }}
-              >
-                Devias Kit <span>PRO</span>
-              </Box>
+              ></Box>
             </Stack>
           </Stack>
         </Container>
