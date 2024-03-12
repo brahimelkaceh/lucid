@@ -28,9 +28,9 @@ import { useDialog } from 'src/hooks/use-dialog';
 import { Customer } from 'src/types/customer';
 import { useMounted } from 'src/hooks/use-mounted';
 import { customersApi } from 'src/api/customers';
-import { SalaryListSearch } from './sections/salary-list-search';
-import { SalaryListTable } from './sections/salary-list-table';
-import { SalaryDrawer } from './sections/salary-drawer';
+import SalaryListSearch from './sections/salary-list-search';
+import SalaryListTable from './sections/salary-list-table';
+import SalaryDrawer from './sections/salary-drawer';
 import { RouterLink } from 'src/components/router-link';
 import { paths } from 'src/paths';
 

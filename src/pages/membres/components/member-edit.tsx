@@ -40,7 +40,7 @@ const methods: PaymentMethod[] = [
   },
 ];
 
-export const MemberEdit: React.FC<MemberEditProps> = ({ onCancel, onSave, member }) => {
+const MemberEdit: React.FC<MemberEditProps> = ({ onCancel, onSave, member }) => {
   const { values, handleChange, handleSubmit, setFieldValue, touched, errors } = useFormik({
     initialValues: {
       id: member.id,
@@ -206,10 +206,8 @@ export const MemberEdit: React.FC<MemberEditProps> = ({ onCancel, onSave, member
     </form>
   );
 };
-
+export default MemberEdit;
 MemberEdit.propTypes = {
   onCancel: PropTypes.func,
   onSave: PropTypes.func,
 };
-
-export default MemberEdit;

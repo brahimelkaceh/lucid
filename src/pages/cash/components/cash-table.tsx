@@ -166,7 +166,7 @@ const sortOptions: Option[] = [
   },
 ];
 
-export const TableCash: FC = () => (
+const TableCash: FC = () => (
   <Box
     sx={{
       p: 3,
@@ -276,3 +276,5 @@ export const TableCash: FC = () => (
     </Card>
   </Box>
 );
+
+export default TableCash;

@@ -17,7 +17,7 @@ interface FileUploaderProps {
   onUpload?: (files: File[]) => void;
 }
 
-export const FileUploader: FC<FileUploaderProps> = (props) => {
+const FileUploader: FC<FileUploaderProps> = (props) => {
   const { onClose, open = false } = props;
   const [files, setFiles] = useState<File[]>([]);
 
@@ -84,6 +84,7 @@ export const FileUploader: FC<FileUploaderProps> = (props) => {
     </Dialog>
   );
 };
+export default FileUploader;
 
 FileUploader.propTypes = {
   onClose: PropTypes.func,

@@ -12,9 +12,8 @@ import { Seo } from 'src/components/seo';
 import { usePageView } from 'src/hooks/use-page-view';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard';
 import { paths } from 'src/paths';
-import { ProductCreateForm } from 'src/sections/dashboard/product/product-create-form';
-import { InvoiceCreateForm } from './components/invoice-create-from';
-import { InvoiceUpdateForm } from './components/items/edit-item';
+
+import InvoiceUpdateForm from './components/items/edit-item';
 
 const Page: NextPage = () => {
   usePageView();

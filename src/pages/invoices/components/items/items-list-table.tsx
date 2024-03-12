@@ -24,7 +24,7 @@ import { Scrollbar } from 'src/components/scrollbar';
 import { FormControlLabel, OutlinedInput, Switch } from '@mui/material';
 import { itemsApi } from '../../../../api/items/index';
 import { Item } from 'src/types/items';
-import { CreateNewItem } from './create-new-item';
+import CreateNewItem from './create-new-item';
 
 interface ItemListTableProps {
   count?: number;
@@ -35,7 +35,7 @@ interface ItemListTableProps {
   rowsPerPage?: number;
 }
 
-export const ItemsListTable: FC<ItemListTableProps> = (props) => {
+const ItemsListTable: FC<ItemListTableProps> = (props) => {
   const {
     count = 0,
     items = [],
@@ -321,3 +321,4 @@ export const ItemsListTable: FC<ItemListTableProps> = (props) => {
     </div>
   );
 };
+export default ItemsListTable;

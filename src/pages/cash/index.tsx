@@ -29,12 +29,12 @@ import { Customer } from 'src/types/customer';
 import { useMounted } from 'src/hooks/use-mounted';
 import { customersApi } from 'src/api/customers';
 import NewCash from 'src/sections/components/forms/new-cash';
-import { CashDrawer } from './components/chash-drawer';
-import { CashStats } from './components/cash-stats';
-import { CashListSearch } from './components/cash-list-search';
-import { CashListTable } from './components/cash-list-table';
+import CashDrawer from './components/chash-drawer';
+import CashStats from './components/cash-stats';
+import CashListSearch from './components/cash-list-search';
+import CashListTable from './components/cash-list-table';
 import NewOutCash from 'src/sections/components/forms/new-out-cash';
-import { TableCash } from './components/cash-table';
+import TableCash from './components/cash-table';
 
 interface Filters {
   query?: string;

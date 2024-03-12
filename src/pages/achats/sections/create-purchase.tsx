@@ -13,7 +13,7 @@ import { Autocomplete, Divider, OutlinedInput, SvgIcon } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { useDialog } from 'src/hooks/use-dialog';
 import { number } from 'prop-types';
-import { FileUploader } from '../components/file-uploader';
+import FileUploader from '../components/file-uploader';
 
 type Option = {
   text: string;
@@ -39,7 +39,7 @@ interface FormValues {
   commentaire: string;
 }
 
-export const PurchaseCreateForm: FC = () => {
+const PurchaseCreateForm: FC = () => {
   const [depositedDate, setDepositedDate] = useState<Date | null>(new Date());
   const [dueDate, setDueDate] = useState<Date | null>(new Date());
 
@@ -275,3 +275,4 @@ export const PurchaseCreateForm: FC = () => {
     </form>
   );
 };
+export default PurchaseCreateForm;

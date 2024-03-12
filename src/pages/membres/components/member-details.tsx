@@ -35,7 +35,7 @@ const getPaymentMethodText = (value: number | null | undefined): string => {
   const method = methods.find((m) => m.value == value);
   return method ? method.text : '--';
 };
-export const MemeberDetails: FC<MemeberDetailsProps> = (props) => {
+const MemeberDetails: FC<MemeberDetailsProps> = (props) => {
   const { onApprove, onEdit, onReject, member } = props;
   const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
 
@@ -125,7 +125,7 @@ export const MemeberDetails: FC<MemeberDetailsProps> = (props) => {
     </Stack>
   );
 };
-
+export default MemeberDetails;
 MemeberDetails.propTypes = {
   onApprove: PropTypes.func,
   onEdit: PropTypes.func,

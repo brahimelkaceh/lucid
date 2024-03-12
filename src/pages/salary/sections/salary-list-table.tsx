@@ -23,7 +23,7 @@ interface SalaryListTableProps {
   rowsPerPage?: number;
 }
 
-export const SalaryListTable: FC<SalaryListTableProps> = (props) => {
+const SalaryListTable: FC<SalaryListTableProps> = (props) => {
   const {
     count = 0,
     items = [],
@@ -102,7 +102,7 @@ export const SalaryListTable: FC<SalaryListTableProps> = (props) => {
     </div>
   );
 };
-
+export default SalaryListTable;
 SalaryListTable.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,

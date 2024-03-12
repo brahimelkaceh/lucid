@@ -33,7 +33,7 @@ interface DeleteSliceModalProps {
   projectId: string;
 }
 
-export const DeleteSliceModal: FC<DeleteSliceModalProps> = ({
+const DeleteSliceModal: FC<DeleteSliceModalProps> = ({
   isOpen,
   onConfirm,
   onCancel,
@@ -107,3 +107,4 @@ export const DeleteSliceModal: FC<DeleteSliceModalProps> = ({
     </Box>
   </Dialog>
 );
+export default DeleteSliceModal;

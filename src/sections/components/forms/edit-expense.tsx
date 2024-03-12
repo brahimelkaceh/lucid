@@ -17,7 +17,7 @@ import {
 import { MobileDatePicker } from '@mui/x-date-pickers';
 import { useDialog } from 'src/hooks/use-dialog';
 import Upload01 from '@untitled-ui/icons-react/build/esm/Upload01';
-import { FileUploader } from 'src/pages/expenses/components/file-uploader';
+import FileUploader from 'src/pages/expenses/components/file-uploader';
 import { SeverityPill } from 'src/components/severity-pill';
 
 interface EditExpenseProps {

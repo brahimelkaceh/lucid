@@ -41,7 +41,7 @@ const dummyData: PaymentHistory[] = [
   // Add more dummy data as needed
 ];
 
-export const SalaryDetails: FC<SalaryDetailsProps> = (props) => {
+const SalaryDetails: FC<SalaryDetailsProps> = (props) => {
   const { onApprove, onEdit, onReject, member } = props;
   const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
   const date = member.updatedAt && format(member.updatedAt, 'dd/MM/yyyy');
@@ -158,7 +158,7 @@ export const SalaryDetails: FC<SalaryDetailsProps> = (props) => {
     </Stack>
   );
 };
-
+export default SalaryDetails;
 SalaryDetails.propTypes = {
   onApprove: PropTypes.func,
   onEdit: PropTypes.func,

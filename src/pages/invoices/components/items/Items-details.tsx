@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import { Item, itemsApi } from '../../../../api/items/index';
 import { FormControlLabel, Stack, Switch } from '@mui/material';
 
-export const ItemsDetails: FC = () => {
+const ItemsDetails: FC = () => {
   const [items, setItems] = useState<Item[]>([]); // Assuming you manage items state somehow
   const [isTvaActive, setIsTvaActive] = useState(true); // Set the initial state based on your logic
 
@@ -90,3 +90,4 @@ export const ItemsDetails: FC = () => {
     </List>
   );
 };
+export default ItemsDetails;

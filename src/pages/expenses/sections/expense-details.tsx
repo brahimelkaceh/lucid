@@ -40,7 +40,7 @@ const dummyData: PaymentHistory[] = [
   // Add more dummy data as needed
 ];
 
-export const ExpenseDetails: FC<ExpenseDetailsProps> = (props) => {
+const ExpenseDetails: FC<ExpenseDetailsProps> = (props) => {
   const { onApprove, onEdit, onReject, member } = props;
   const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
   const date = member.updatedAt && format(member.updatedAt, 'dd/MM/yyyy');
@@ -166,7 +166,7 @@ export const ExpenseDetails: FC<ExpenseDetailsProps> = (props) => {
     </Stack>
   );
 };
-
+export default ExpenseDetails;
 ExpenseDetails.propTypes = {
   onApprove: PropTypes.func,
   onEdit: PropTypes.func,

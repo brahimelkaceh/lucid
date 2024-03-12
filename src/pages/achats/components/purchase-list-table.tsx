@@ -159,7 +159,7 @@ interface PurchaseListTableProps {
   rowsPerPage?: number;
 }
 
-export const PurchaseListTable: FC<PurchaseListTableProps> = (props) => {
+ const PurchaseListTable: FC<PurchaseListTableProps> = (props) => {
   const {
     group = false,
     items = [],
@@ -251,7 +251,7 @@ export const PurchaseListTable: FC<PurchaseListTableProps> = (props) => {
     </Stack>
   );
 };
-
+export default PurchaseListTable
 PurchaseListTable.propTypes = {
   count: PropTypes.number,
   group: PropTypes.bool,

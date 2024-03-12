@@ -16,9 +16,6 @@ import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import type { File } from 'src/components/file-dropzone';
-import { FileDropzone } from 'src/components/file-dropzone';
-import { QuillEditor } from 'src/components/quill-editor';
 import { useRouter } from 'src/hooks/use-router';
 import { paths } from 'src/paths';
 import { Divider, OutlinedInput } from '@mui/material';
@@ -27,8 +24,8 @@ import { Product } from 'src/types/product';
 import { useMounted } from 'src/hooks/use-mounted';
 import { productsApi } from 'src/api/products';
 import { Item, itemsApi } from 'src/api/items';
-import { ItemsListTable } from './items-list-table';
-import { ItemsDetails } from './Items-details';
+import ItemsListTable from './items-list-table';
+import ItemsDetails from './Items-details';
 
 interface CustomerOption {
   label: string;
@@ -218,7 +215,7 @@ const useItemsStore = (searchState: itemsSearchState) => {
   };
 };
 
-export const InvoiceUpdateForm: FC = (props) => {
+const InvoiceUpdateForm: FC = (props) => {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date());
   const [isSwitchOn, setSwitchOn] = useState(false);
@@ -489,3 +486,4 @@ export const InvoiceUpdateForm: FC = (props) => {
     </form>
   );
 };
+export default InvoiceUpdateForm;

@@ -20,7 +20,7 @@ interface ExpenseDrawerProps {
   member?: Customer;
 }
 
-export const ExpenseDrawer: FC<ExpenseDrawerProps> = (props) => {
+const ExpenseDrawer: FC<ExpenseDrawerProps> = (props) => {
   const { container, onClose, open, member } = props;
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
@@ -119,7 +119,7 @@ export const ExpenseDrawer: FC<ExpenseDrawerProps> = (props) => {
     </Drawer>
   );
 };
-
+export default ExpenseDrawer;
 ExpenseDrawer.propTypes = {
   container: PropTypes.any,
   onClose: PropTypes.func,

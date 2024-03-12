@@ -10,8 +10,8 @@ import SvgIcon from '@mui/material/SvgIcon';
 import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import type { Theme } from '@mui/material/styles/createTheme';
-import { MemeberDetails } from './member-details';
-import { MemberEdit } from './member-edit';
+import MemeberDetails from './member-details';
+import MemberEdit from './member-edit';
 import { Member } from 'src/types/members';
 import toast from 'react-hot-toast';
 import FirebaseMembers from 'src/firebaseServices/membres';
@@ -24,7 +24,7 @@ interface MemberDrawerProps {
   onUpdateMember: () => void;
 }
 
-export const MemberDrawer: FC<MemberDrawerProps> = (props) => {
+const MemberDrawer: FC<MemberDrawerProps> = (props) => {
   const { container, onClose, open, member, onUpdateMember } = props;
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
@@ -154,7 +154,7 @@ export const MemberDrawer: FC<MemberDrawerProps> = (props) => {
     </Drawer>
   );
 };
-
+export default MemberDrawer;
 MemberDrawer.propTypes = {
   container: PropTypes.any,
   onClose: PropTypes.func,

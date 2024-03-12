@@ -9,14 +9,14 @@ import { PropertyListItem } from 'src/components/property-list-item';
 import { LinearProgress, Typography } from '@mui/material';
 import numeral from 'numeral';
 import type { Project } from 'src/types/project';
-import { ProjectDeleteManage } from './project-delete-management';
+import ProjectDeleteManage from './project-delete-management';
 
 interface ProjectDetailsProps {
   project: Project | null;
   loading: boolean;
 }
 
-export const ProjectDetails: FC<ProjectDetailsProps> = ({ project, loading, ...props }) => {
+const ProjectDetails: FC<ProjectDetailsProps> = ({ project, loading, ...props }) => {
   const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'));
   const totalAmount = project ? numeral(project.amount).format(`0,0.00`) : 'N/A';
 
@@ -96,3 +96,4 @@ export const ProjectDetails: FC<ProjectDetailsProps> = ({ project, loading, ...p
     </Card>
   );
 };
+export default ProjectDetails;

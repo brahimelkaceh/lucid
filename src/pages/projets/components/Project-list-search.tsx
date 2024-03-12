@@ -23,30 +23,6 @@ interface Filters {
 
 type TabValue = 'all' | 'hasAcceptedMarketing' | 'isProspect' | 'isReturning';
 
-interface TabOption {
-  label: string;
-  value: TabValue;
-}
-
-const tabs: TabOption[] = [
-  {
-    label: 'All',
-    value: 'all',
-  },
-  {
-    label: 'Accepts Marketing',
-    value: 'hasAcceptedMarketing',
-  },
-  {
-    label: 'Prospect',
-    value: 'isProspect',
-  },
-  {
-    label: 'Returning',
-    value: 'isReturning',
-  },
-];
-
 type SortValue = 'updatedAt|desc' | 'updatedAt|asc' | 'totalOrders|desc' | 'totalOrders|asc';
 
 interface SortOption {
@@ -82,7 +58,7 @@ interface ProjectListSearchProps {
   sortDir?: SortDir;
 }
 
-export const ProjectListSearch: FC<ProjectListSearchProps> = (props) => {
+const ProjectListSearch: FC<ProjectListSearchProps> = (props) => {
   const { onFiltersChange, onSortChange, sortBy, sortDir } = props;
   const queryRef = useRef<HTMLInputElement | null>(null);
   const [currentTab, setCurrentTab] = useState<TabValue>('all');
@@ -183,7 +159,7 @@ export const ProjectListSearch: FC<ProjectListSearchProps> = (props) => {
     </>
   );
 };
-
+export default ProjectListSearch;
 ProjectListSearch.propTypes = {
   onFiltersChange: PropTypes.func,
   onSortChange: PropTypes.func,

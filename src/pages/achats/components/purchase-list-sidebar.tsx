@@ -50,7 +50,7 @@ interface PurchaseListSidebarProps {
   open?: boolean;
 }
 
-export const PurchaseListSidebar: FC<PurchaseListSidebarProps> = (props) => {
+const PurchaseListSidebar: FC<PurchaseListSidebarProps> = (props) => {
   const {
     container,
     filters = {},
@@ -320,7 +320,7 @@ export const PurchaseListSidebar: FC<PurchaseListSidebarProps> = (props) => {
     </Drawer>
   );
 };
-
+export default PurchaseListSidebar;
 PurchaseListSidebar.propTypes = {
   container: PropTypes.any,
   // @ts-ignore

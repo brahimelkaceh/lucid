@@ -29,7 +29,7 @@ interface UpdateConfirmationModalProps {
   onCancel: () => void;
 }
 
-export const UpdateConfirmationModal: FC<UpdateConfirmationModalProps> = ({
+const UpdateConfirmationModal: FC<UpdateConfirmationModalProps> = ({
   isOpen,
   onConfirm,
   onCancel,
@@ -85,3 +85,4 @@ export const UpdateConfirmationModal: FC<UpdateConfirmationModalProps> = ({
     </Box>
   </Dialog>
 );
+export default UpdateConfirmationModal;

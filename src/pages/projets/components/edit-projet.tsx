@@ -9,7 +9,7 @@ import PlusIcon from '@untitled-ui/icons-react/build/esm/Plus';
 import { Project } from 'src/types/project';
 import { Formik, useFormik } from 'formik';
 import * as Yup from 'yup';
-import { UpdateConfirmationModal } from './update-confirmation-modal';
+import UpdateConfirmationModal from './update-confirmation-modal';
 import FirebaseProjects from 'src/firebaseServices/projets';
 import toast from 'react-hot-toast';
 import { paths } from 'src/paths';
@@ -19,7 +19,7 @@ interface EditProjectProps {
   project: Project;
 }
 
-export const EditProject: FC<EditProjectProps> = (props) => {
+const EditProject: FC<EditProjectProps> = (props) => {
   const { project } = props;
   const router = useRouter();
   const [financialBackersInput, setFinancialBackersInput] = useState<string>('');
@@ -302,7 +302,7 @@ export const EditProject: FC<EditProjectProps> = (props) => {
     </>
   );
 };
-
+export default EditProject;
 EditProject.propTypes = {
   onCancel: PropTypes.func,
   onSave: PropTypes.func,

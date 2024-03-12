@@ -23,12 +23,12 @@ import { useRouter } from 'src/hooks/use-router';
 import { paths } from 'src/paths';
 import { Divider, OutlinedInput } from '@mui/material';
 import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
-import { ItemsListTable } from './items/items-list-table';
+import ItemsListTable from './items/items-list-table';
 import { Product } from 'src/types/product';
 import { useMounted } from 'src/hooks/use-mounted';
 import { productsApi } from 'src/api/products';
 import { Item, itemsApi } from 'src/api/items';
-import { ItemsDetails } from './items/Items-details';
+import ItemsDetails from './items/Items-details';
 
 interface CustomerOption {
   label: string;
@@ -205,7 +205,7 @@ const useItemsStore = (searchState: itemsSearchState) => {
   };
 };
 
-export const InvoiceCreateForm: FC = (props) => {
+const InvoiceCreateForm: FC = (props) => {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date());
   const [isSwitchOn, setSwitchOn] = useState(false);
@@ -449,3 +449,5 @@ export const InvoiceCreateForm: FC = (props) => {
     </form>
   );
 };
+
+export default InvoiceCreateForm;

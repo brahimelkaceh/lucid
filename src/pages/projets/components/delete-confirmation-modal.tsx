@@ -32,7 +32,7 @@ interface DeleteConfirmationModalProps {
   id?: string;
 }
 
-export const DeleteConfirmationModal: FC<DeleteConfirmationModalProps> = ({
+const DeleteConfirmationModal: FC<DeleteConfirmationModalProps> = ({
   isOpen,
   onConfirm,
   onCancel,
@@ -105,3 +105,4 @@ export const DeleteConfirmationModal: FC<DeleteConfirmationModalProps> = ({
     </Box>
   </Dialog>
 );
+export default DeleteConfirmationModal;

@@ -10,7 +10,7 @@ import React, { FC, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import FirebaseSlices from 'src/firebaseServices/tranches';
 import { paths } from 'src/paths';
-import { DeleteSliceModal } from './delete-slice-modal';
+import DeleteSliceModal from './delete-slice-modal';
 import * as yup from 'yup';
 import { slice } from 'src/types/slice';
 import { format } from 'date-fns';

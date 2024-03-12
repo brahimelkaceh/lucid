@@ -74,7 +74,7 @@ interface SalaryListSearchProps {
   sortDir?: 'asc' | 'desc';
 }
 
-export const SalaryListSearch: FC<SalaryListSearchProps> = (props) => {
+const SalaryListSearch: FC<SalaryListSearchProps> = (props) => {
   const {
     onFiltersChange,
     onSortChange,
@@ -156,7 +156,7 @@ export const SalaryListSearch: FC<SalaryListSearchProps> = (props) => {
     </div>
   );
 };
-
+export default SalaryListSearch;
 SalaryListSearch.propTypes = {
   onFiltersChange: PropTypes.func,
   onSortChange: PropTypes.func,

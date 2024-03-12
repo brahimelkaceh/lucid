@@ -6,7 +6,6 @@ const config = {
     ignoreDuringBuilds: true,
   },
   reactStrictMode: false,
-  output: 'export',
   images: {
     unoptimized: true,
   },

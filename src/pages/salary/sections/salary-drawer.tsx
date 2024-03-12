@@ -12,8 +12,8 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import type { Theme } from '@mui/material/styles/createTheme';
 
 import { Customer } from 'src/types/customer';
-import { SalaryDetails } from './salary-details';
-import { SalaryEdit } from './salary-edit';
+import SalaryDetails from './salary-details';
+import SalaryEdit from './salary-edit';
 
 interface SalaryDrawerProps {
   container?: HTMLDivElement | null;
@@ -22,7 +22,7 @@ interface SalaryDrawerProps {
   member?: Customer;
 }
 
-export const SalaryDrawer: FC<SalaryDrawerProps> = (props) => {
+const SalaryDrawer: FC<SalaryDrawerProps> = (props) => {
   const { container, onClose, open, member } = props;
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
@@ -136,7 +136,7 @@ export const SalaryDrawer: FC<SalaryDrawerProps> = (props) => {
     </Drawer>
   );
 };
-
+export default SalaryDrawer;
 SalaryDrawer.propTypes = {
   container: PropTypes.any,
   onClose: PropTypes.func,

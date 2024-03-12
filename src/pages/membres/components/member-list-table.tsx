@@ -29,7 +29,7 @@ interface MemberListTableProps {
   onDeleteMember?: () => void;
 }
 
-export const MemberListTable: FC<MemberListTableProps> = (props) => {
+const MemberListTable: FC<MemberListTableProps> = (props) => {
   const {
     count = 0,
     members = [],
@@ -133,7 +133,7 @@ export const MemberListTable: FC<MemberListTableProps> = (props) => {
     </div>
   );
 };
-
+export default MemberListTable;
 MemberListTable.propTypes = {
   count: PropTypes.number,
   members: PropTypes.array,

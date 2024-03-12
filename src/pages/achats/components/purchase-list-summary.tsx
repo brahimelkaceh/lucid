@@ -9,7 +9,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-export const PurchaseListSummary: FC = () => (
+const PurchaseListSummary: FC = () => (
   <div>
     <Grid
       container
@@ -139,3 +139,5 @@ export const PurchaseListSummary: FC = () => (
     </Grid>
   </div>
 );
+
+export default PurchaseListSummary;

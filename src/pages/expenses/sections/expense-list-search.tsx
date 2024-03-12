@@ -75,7 +75,7 @@ interface ExpenseListSearchProps {
   sortDir?: 'asc' | 'desc';
 }
 
-export const ExpenseListSearch: FC<ExpenseListSearchProps> = (props) => {
+const ExpenseListSearch: FC<ExpenseListSearchProps> = (props) => {
   const {
     onFiltersChange,
     onSortChange,
@@ -160,7 +160,7 @@ export const ExpenseListSearch: FC<ExpenseListSearchProps> = (props) => {
     </div>
   );
 };
-
+export default ExpenseListSearch;
 ExpenseListSearch.propTypes = {
   onFiltersChange: PropTypes.func,
   onSortChange: PropTypes.func,

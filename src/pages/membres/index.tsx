@@ -17,9 +17,9 @@ import { OrderListContainer } from 'src/sections/dashboard/order/order-list-cont
 import { RouterLink } from 'src/components/router-link';
 import { paths } from 'src/paths';
 import { Member } from 'src/types/members';
-import { MemberDrawer } from './components/member-drawer';
-import { MemberListSearch } from './components/member-list-search';
-import { MemberListTable } from './components/member-list-table';
+import MemberDrawer from './components/member-drawer';
+import MemberListSearch from './components/member-list-search';
+import MemberListTable from './components/member-list-table';
 import FirebaseMembers from 'src/firebaseServices/membres';
 
 interface Filters {

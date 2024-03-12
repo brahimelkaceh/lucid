@@ -27,7 +27,7 @@ interface ExpenseListTableProps {
   rowsPerPage?: number;
 }
 
-export const ExpenseListTable: FC<ExpenseListTableProps> = (props) => {
+const ExpenseListTable: FC<ExpenseListTableProps> = (props) => {
   const {
     count = 0,
     items = [],
@@ -123,7 +123,7 @@ export const ExpenseListTable: FC<ExpenseListTableProps> = (props) => {
     </div>
   );
 };
-
+export default ExpenseListTable;
 ExpenseListTable.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,

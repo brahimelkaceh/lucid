@@ -25,9 +25,9 @@ import type { Invoice, InvoiceStatus } from 'src/types/invoice';
 import Link from 'next/link';
 import { paths } from 'src/paths';
 import { RouterLink } from 'src/components/router-link';
-import { PurchaseListSummary } from './components/purchase-list-summary';
-import { PurchaseListTable } from './components/purchase-list-table';
-import { PurchaseListSidebar } from './components/purchase-list-sidebar';
+import PurchaseListTable from './components/purchase-list-table';
+import PurchaseListSidebar from './components/purchase-list-sidebar';
+import PurchaseListSummary from './components/purchase-list-summary';
 
 interface Filters {
   customers?: string[];

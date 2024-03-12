@@ -74,7 +74,7 @@ interface CashListSearchProps {
   sortDir?: 'asc' | 'desc';
 }
 
-export const CashListSearch: FC<CashListSearchProps> = (props) => {
+const CashListSearch: FC<CashListSearchProps> = (props) => {
   const {
     onFiltersChange,
     onSortChange,
@@ -156,7 +156,7 @@ export const CashListSearch: FC<CashListSearchProps> = (props) => {
     </div>
   );
 };
-
+export default CashListSearch;
 CashListSearch.propTypes = {
   onFiltersChange: PropTypes.func,
   onSortChange: PropTypes.func,

@@ -14,15 +14,15 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { Scrollbar } from 'src/components/scrollbar';
-import { SlicesTotalAmounts } from './slice-total-amounts';
+import SlicesTotalAmounts from './slice-total-amounts';
 import Edit from '@mui/icons-material/Edit';
 import Trash02 from '@untitled-ui/icons-react/build/esm/Trash02';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
-import { DeleteConfirmationModal } from './delete-confirmation-modal';
+import DeleteConfirmationModal from './delete-confirmation-modal';
 import { slice } from 'src/types/slice';
 import FirebaseSlices from 'src/firebaseServices/tranches';
-import { DeleteSliceModal } from './delete-slice-modal';
+import DeleteSliceModal from './delete-slice-modal';
 import { useRouter } from 'next/router';
 import { paths } from 'src/paths';
 import { useFormik } from 'formik';
@@ -38,7 +38,7 @@ interface SlicesListTableProps {
   loading?: boolean;
 }
 
-export const SlicesListTable: FC<SlicesListTableProps> = (props) => {
+const SlicesListTable: FC<SlicesListTableProps> = (props) => {
   const { slices = [], total, projectId, onRefresh, onUpdate, loading, ...other } = props;
 
   return (
@@ -85,7 +85,7 @@ export const SlicesListTable: FC<SlicesListTableProps> = (props) => {
     </>
   );
 };
-
+export default SlicesListTable;
 SlicesListTable.propTypes = {
   slices: PropTypes.array,
 };

@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import { Divider, OutlinedInput, SvgIcon } from '@mui/material';
 import { DatePicker, DateTimePicker } from '@mui/x-date-pickers';
 import { useDialog } from 'src/hooks/use-dialog';
-import { FileUploader } from '../components/file-uploader';
+import FileUploader from '../components/file-uploader';
 
 type Option = {
   text: string;
@@ -40,7 +40,7 @@ interface FormValues {
   commentaire: string;
 }
 
-export const PurchaseUpdateForm: FC = (props) => {
+const PurchaseUpdateForm: FC = (props) => {
   const [depositedDate, setDepositedDate] = useState<Date | null>(new Date());
   const [dueDate, setDueDate] = useState<Date | null>(new Date());
 
@@ -279,3 +279,4 @@ export const PurchaseUpdateForm: FC = (props) => {
     </form>
   );
 };
+export default PurchaseUpdateForm;

@@ -24,7 +24,7 @@ import { BreadcrumbsSeparator } from 'src/components/breadcrumbs-separator';
 import { Project } from 'src/types/project';
 import FirebaseProjects from 'src/firebaseServices/projets';
 import { useRouter } from 'next/router';
-import { EditProject } from '../components/edit-projet';
+import EditProject from '../components/edit-projet';
 
 const useProject = (projectId: string): Project | null => {
   const isMounted = useMounted();

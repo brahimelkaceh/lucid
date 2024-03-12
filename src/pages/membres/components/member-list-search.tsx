@@ -37,7 +37,7 @@ interface MemberListSearchProps {
   sortDir?: 'asc' | 'desc';
 }
 
-export const MemberListSearch: FC<MemberListSearchProps> = (props) => {
+const MemberListSearch: FC<MemberListSearchProps> = (props) => {
   const {
     onFiltersChange,
     onSortChange,
@@ -108,7 +108,7 @@ export const MemberListSearch: FC<MemberListSearchProps> = (props) => {
     </div>
   );
 };
-
+export default MemberListSearch;
 MemberListSearch.propTypes = {
   onFiltersChange: PropTypes.func,
   onSortChange: PropTypes.func,

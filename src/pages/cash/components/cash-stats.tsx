@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 
 import { SeverityPill } from 'src/components/severity-pill';
 
-export const CashStats: FC = () => (
+const CashStats: FC = () => (
   <Grid
     container
     spacing={3}
@@ -173,3 +173,5 @@ export const CashStats: FC = () => (
     </Grid>
   </Grid>
 );
+
+export default CashStats;

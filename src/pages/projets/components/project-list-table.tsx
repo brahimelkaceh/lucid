@@ -35,7 +35,7 @@ interface ProjectListTableProps {
   selected?: string[];
 }
 
-export const ProjectListTable: FC<ProjectListTableProps> = (props) => {
+const ProjectListTable: FC<ProjectListTableProps> = (props) => {
   const {
     count = 0,
     items = [],
@@ -162,7 +162,7 @@ export const ProjectListTable: FC<ProjectListTableProps> = (props) => {
     </Box>
   );
 };
-
+export default ProjectListTable;
 ProjectListTable.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,

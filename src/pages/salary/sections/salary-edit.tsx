@@ -15,7 +15,7 @@ interface SalaryEditProps {
   member: Customer;
 }
 
-export const SalaryEdit: FC<SalaryEditProps> = (props) => {
+const SalaryEdit: FC<SalaryEditProps> = (props) => {
   const { onCancel, onSave, member } = props;
 
   const dateFromTimestamp = member.updatedAt && toDate(member.updatedAt);
@@ -79,7 +79,7 @@ export const SalaryEdit: FC<SalaryEditProps> = (props) => {
     </Stack>
   );
 };
-
+export default SalaryEdit;
 SalaryEdit.propTypes = {
   onCancel: PropTypes.func,
   onSave: PropTypes.func,

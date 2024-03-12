@@ -23,7 +23,7 @@ interface SlicesTotalAmountsProps {
   slicesTotal: number | null;
 }
 
-export const SlicesTotalAmounts: FC<SlicesTotalAmountsProps> = (props) => {
+const SlicesTotalAmounts: FC<SlicesTotalAmountsProps> = (props) => {
   const { slicesTotal } = props;
   console.log(slicesTotal);
 
@@ -48,7 +48,7 @@ export const SlicesTotalAmounts: FC<SlicesTotalAmountsProps> = (props) => {
     </Card>
   );
 };
-
+export default SlicesTotalAmounts;
 SlicesTotalAmounts.propTypes = {
   slicesTotal: PropTypes.number.isRequired,
 };

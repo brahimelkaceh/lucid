@@ -28,7 +28,7 @@ interface CashListTableProps {
   rowsPerPage?: number;
 }
 // Sorties: Notes de frais / Entretien et réparation / Achats et services
-export const CashListTable: FC<CashListTableProps> = (props) => {
+const CashListTable: FC<CashListTableProps> = (props) => {
   const {
     count = 0,
     items = [],
@@ -89,7 +89,7 @@ export const CashListTable: FC<CashListTableProps> = (props) => {
     </div>
   );
 };
-
+export default CashListTable;
 CashListTable.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,

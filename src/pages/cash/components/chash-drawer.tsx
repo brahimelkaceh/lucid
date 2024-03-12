@@ -20,7 +20,7 @@ interface CashDrawerProps {
   member?: Customer;
 }
 
-export const CashDrawer: FC<CashDrawerProps> = (props) => {
+ const CashDrawer: FC<CashDrawerProps> = (props) => {
   const { container, onClose, open, member } = props;
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
@@ -120,6 +120,7 @@ export const CashDrawer: FC<CashDrawerProps> = (props) => {
   );
 };
 
+export default CashDrawer
 CashDrawer.propTypes = {
   container: PropTypes.any,
   onClose: PropTypes.func,

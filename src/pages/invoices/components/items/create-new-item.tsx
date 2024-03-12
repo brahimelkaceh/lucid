@@ -11,7 +11,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { FormControlLabel, OutlinedInput, Switch } from '@mui/material';
 
-export const CreateNewItem = () => {
+const CreateNewItem = () => {
   const [isForfait, setForfait] = useState(false);
 
   const handleForfaitChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -115,3 +115,5 @@ export const CreateNewItem = () => {
     </CardContent>
   );
 };
+
+export default CreateNewItem;

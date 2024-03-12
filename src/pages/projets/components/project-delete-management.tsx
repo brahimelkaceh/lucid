@@ -6,7 +6,7 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import FirebaseProjects from 'src/firebaseServices/projets';
 import toast from 'react-hot-toast';
-import { DeleteConfirmationModal } from './delete-confirmation-modal';
+import DeleteConfirmationModal from './delete-confirmation-modal';
 import { paths } from 'src/paths';
 import { useRouter } from 'next/router';
 import { CardActionArea, CardActions } from '@mui/material';
@@ -15,7 +15,7 @@ interface ProjectDeleteManageProps {
   projectId: string;
 }
 
-export const ProjectDeleteManage: FC<ProjectDeleteManageProps> = ({ projectId, ...props }) => {
+const ProjectDeleteManage: FC<ProjectDeleteManageProps> = ({ projectId, ...props }) => {
   const router = useRouter();
   const [isDeleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const handleDeleteClick = () => {
@@ -61,3 +61,4 @@ export const ProjectDeleteManage: FC<ProjectDeleteManageProps> = ({ projectId, .
     </CardActions>
   );
 };
+export default ProjectDeleteManage;
