@@ -49,7 +49,7 @@ const Page: NextPage = () => {
                 </Typography>
               </Breadcrumbs>
             </Stack>
-            <Container maxWidth="lg">
+            <Container maxWidth="md">
               <Card>
                 <NewMemberForm></NewMemberForm>
               </Card>
