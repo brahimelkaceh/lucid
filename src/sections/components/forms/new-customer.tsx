@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
+import toast from 'react-hot-toast';
 
 interface NewCustomerFormProps {
   onSubmit: (formData: NewCustomerFormData) => void;
@@ -15,7 +16,7 @@ interface NewCustomerFormData {
   billingId: string;
 }
 
-const NewCustomerForm: FC<NewCustomerFormProps> = ({ onSubmit }) => {
+const NewCustomerForm = () => {
   const [fullName, setFullName] = useState<string>('');
   const [ice, setICE] = useState<number | ''>('');
   const [address, setAddress] = useState<string>('');
@@ -47,8 +48,8 @@ const NewCustomerForm: FC<NewCustomerFormProps> = ({ onSubmit }) => {
       address,
       billingId,
     };
+    toast.success('Client créé avec succès !');
     console.log(formData);
-    onSubmit(formData);
   };
 
   return (

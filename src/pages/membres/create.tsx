@@ -12,7 +12,7 @@ import { Seo } from 'src/components/seo';
 import { usePageView } from 'src/hooks/use-page-view';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard';
 import { paths } from 'src/paths';
-import { Card } from '@mui/material';
+import { Card, CardHeader } from '@mui/material';
 import NewMemberForm from 'src/sections/components/forms/new-member';
 
 const Page: NextPage = () => {

@@ -16,7 +16,8 @@ import { Layout as DashboardLayout } from 'src/layouts/dashboard';
 import { EcommerceStats } from 'src/sections/dashboard/ecommerce/ecommerce-stats';
 import { EcommerceProducts } from 'src/sections/dashboard/ecommerce/ecommerce-products';
 import { DashboardStats } from 'src/sections/dashboard/ecommerce/dashboard-stats';
-import { Divider } from '@mui/material';
+import { Card, CardHeader, Divider } from '@mui/material';
+import NewCustomerForm from 'src/sections/components/forms/new-customer';
 
 const now = new Date();
 
@@ -44,16 +45,29 @@ const Page: NextPage = () => {
             }}
           >
             <Grid xs={12}>
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                spacing={4}
-              >
-                <div>
-                  <Typography variant="h4">Gestion clients</Typography>
-                </div>
-              </Stack>
+              <Box sx={{ p: 3 }}>
+                <Stack
+                  alignItems="flex-start"
+                  direction="row"
+                  justifyContent="space-between"
+                  spacing={4}
+                  sx={{ mx: 5 }}
+                >
+                  <div>
+                    <Typography variant="h4">Gestion clients</Typography>
+                  </div>
+                </Stack>
+              </Box>
               <Divider />
+            </Grid>
+            <Grid xs={12}>
+              <Container maxWidth="lg">
+                <Card>
+                  <CardHeader title="Nouveau client" />
+                  <Divider />
+                  <NewCustomerForm></NewCustomerForm>
+                </Card>
+              </Container>
             </Grid>
           </Grid>
         </Container>
