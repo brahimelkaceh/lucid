@@ -1,4 +1,4 @@
-export const membersData = {
+export default membersData = {
   members: [
     {
       id: '1cEw3aHAuqDSAPfraPYx',
