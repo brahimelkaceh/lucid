@@ -50,7 +50,8 @@ const MemberEdit: React.FC<MemberEditProps> = ({ onCancel, onSave, member }) => 
       payment_method: member.payment_method,
       amount: member.amount,
       payment_date:
-        member.status === 'paid' ? member.payment_date && member.payment_date.toDate() : new Date(),
+        // member.status === 'paid' ? member.payment_date && member.payment_date.toDate() : new Date(),
+        member.status === 'paid' ? member.payment_date && member.payment_date : new Date(),
       status: member.status,
       updated_at: new Date(),
     },
@@ -79,7 +80,8 @@ const MemberEdit: React.FC<MemberEditProps> = ({ onCancel, onSave, member }) => 
     setFieldValue('amount', member.amount);
     setFieldValue(
       'payment_date',
-      member.status === 'paid' ? member.payment_date && member.payment_date.toDate() : new Date()
+      // member.status === 'paid' ? member.payment_date && member.payment_date.toDate() : new Date()
+      member.status === 'paid' ? member.payment_date && member.payment_date : new Date()
     );
     setFieldValue('status', member.status);
   }, [member, setFieldValue]);

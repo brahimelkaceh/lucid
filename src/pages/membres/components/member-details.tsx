@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { useState, type FC } from 'react';
 import PropTypes from 'prop-types';
 import { format, fromUnixTime } from 'date-fns';
 import numeral from 'numeral';
@@ -24,6 +24,10 @@ import type { Order, OrderStatus } from 'src/types/order';
 import { Customer } from 'src/types/customer';
 import { Member, methods } from 'src/types/members';
 import { date } from 'yup';
+import Trash02 from '@untitled-ui/icons-react/build/esm/Trash02';
+import { Divider } from '@mui/material';
+import toast from 'react-hot-toast';
+import DeleteConfirmationModal from './delete-confirmation';
 
 interface MemeberDetailsProps {
   onApprove?: () => void;
@@ -37,22 +41,51 @@ const getPaymentMethodText = (value: number | null | undefined): string => {
 };
 const MemeberDetails: FC<MemeberDetailsProps> = (props) => {
   const { onApprove, onEdit, onReject, member } = props;
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+  };
+  const handleDelete = async () => {
+    try {
+      toast.success('Le membre a été supprimé avec succès!');
+      setDeleteModalOpen(false);
+      if (onApprove !== undefined) {
+        onApprove();
+      }
+    } catch (error) {
+      console.error('Error deleting member: ', error);
+      toast.error('Échec de la suppression du membre. Veuillez réessayer.');
+    }
+  };
   const lgUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('lg'));
 
   const align = lgUp ? 'horizontal' : 'vertical';
 
-  const date = member.payment_date && format(member.payment_date?.toDate(), 'dd/MM/yyyy');
+  // const date = member.payment_date && format(member.payment_date?.toDate(), 'dd/MM/yyyy');
+  const date = member.payment_date.toLocaleDateString('en-GB');
 
   return (
     <Stack spacing={6}>
-      <Stack spacing={3}>
+      <DeleteConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onConfirm={handleDelete}
+        onCancel={handleDeleteCancel}
+        message="Êtes vous sûr de vouloir supprimer le projet? Cette action sera irréversible."
+        id={member.id}
+      />
+      <Stack
+        alignItems={'start'}
+        spacing={3}
+      >
         <Stack
           alignItems="center"
           direction="row"
           justifyContent="space-between"
           spacing={3}
+          width={'100%'}
         >
           <Typography variant="h6">Détails du membre</Typography>
+
           <Button
             color="warning"
             variant="outlined"
@@ -67,60 +100,75 @@ const MemeberDetails: FC<MemeberDetailsProps> = (props) => {
             Modifier
           </Button>
         </Stack>
-        <PropertyList>
-          <PropertyListItem
-            align={align}
-            disableGutters
-            divider
-            label="Nom/Raison Sociale"
-            value={member.full_name}
-          />
-          <PropertyListItem
-            align={align}
-            disableGutters
-            divider
-            label="Email"
-            value={member.email}
-          />
-          <PropertyListItem
-            align={align}
-            disableGutters
-            divider
-            label="Registre de Commerce"
-            value={member.rc_cin}
-          />
-          <PropertyListItem
-            align={align}
-            disableGutters
-            divider
-            label="Moyen de paiement"
-            value={getPaymentMethodText(member.payment_method)}
-          ></PropertyListItem>
-          <PropertyListItem
-            align={align}
-            disableGutters
-            divider
-            label="Montant"
-            value={'MAD ' + member.amount}
-          />
-          <PropertyListItem
-            align={align}
-            disableGutters
-            divider
-            label="Reçu le"
-            value={member.status == 'paid' ? date ?? '' : '--'}
-          />
-          <PropertyListItem
-            align={align}
-            disableGutters
-            divider
-            label="Statut"
-          >
-            <SeverityPill color={member.status == 'paid' ? 'success' : 'error'}>
-              {member.status == 'paid' ? 'Payée' : 'Impayée'}
-            </SeverityPill>
-          </PropertyListItem>
-        </PropertyList>
+        <Stack width={'100%'}>
+          <PropertyList>
+            <PropertyListItem
+              align={align}
+              disableGutters
+              divider
+              label="Nom/Raison Sociale"
+              value={member.full_name}
+            />
+            <PropertyListItem
+              align={align}
+              disableGutters
+              divider
+              label="Email"
+              value={member.email}
+            />
+            <PropertyListItem
+              align={align}
+              disableGutters
+              divider
+              label="Registre de Commerce"
+              value={member.rc_cin}
+            />
+            <PropertyListItem
+              align={align}
+              disableGutters
+              divider
+              label="Moyen de paiement"
+              value={getPaymentMethodText(member.payment_method)}
+            ></PropertyListItem>
+            <PropertyListItem
+              align={align}
+              disableGutters
+              divider
+              label="Montant"
+              value={'MAD ' + member.amount}
+            />
+            <PropertyListItem
+              align={align}
+              disableGutters
+              divider
+              label="Reçu le"
+              value={member.status == 'paid' ? date ?? '' : '--'}
+            />
+            <PropertyListItem
+              align={align}
+              disableGutters
+              divider
+              label="Statut"
+            >
+              <SeverityPill color={member.status == 'paid' ? 'success' : 'error'}>
+                {member.status == 'paid' ? 'Payée' : 'Impayée'}
+              </SeverityPill>
+            </PropertyListItem>
+          </PropertyList>
+        </Stack>
+        <Button
+          color="error"
+          variant="text"
+          onClick={() => setDeleteModalOpen(true)}
+          size="small"
+          startIcon={
+            <SvgIcon>
+              <Trash02 />
+            </SvgIcon>
+          }
+        >
+          Supprimer
+        </Button>
       </Stack>
     </Stack>
   );

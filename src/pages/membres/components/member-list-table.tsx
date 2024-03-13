@@ -1,4 +1,4 @@
-import type { ChangeEvent, FC, MouseEvent } from 'react';
+import { useState, type ChangeEvent, type FC, type MouseEvent } from 'react';
 import PropTypes from 'prop-types';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -16,6 +16,7 @@ import { IconButton, SvgIcon, TableHead } from '@mui/material';
 import { Member, methods } from 'src/types/members';
 import toast from 'react-hot-toast';
 import FirebaseMembers from 'src/firebaseServices/membres';
+import DeleteConfirmationModal from './delete-confirmation';
 
 interface MemberListTableProps {
   count?: number;
@@ -47,17 +48,7 @@ const MemberListTable: FC<MemberListTableProps> = (props) => {
     const method = methods.find((m) => m.value == value);
     return method ? method.text : '--';
   };
-  const handleDelete = async (memberId: string) => {
-    try {
-      const firebaseDeleteMember = new FirebaseMembers();
-      await firebaseDeleteMember.deleteMember(memberId, onDeleteMember);
-      onDelete?.(memberId);
-      toast.success('Le membre a été supprimé avec succès!');
-    } catch (error) {
-      console.error('Error deleting member: ', error);
-      toast.error('Échec de la suppression du membre. Veuillez réessayer.');
-    }
-  };
+
   return (
     <div>
       <Table>
@@ -98,14 +89,17 @@ const MemberListTable: FC<MemberListTableProps> = (props) => {
                   </SeverityPill>
                 </TableCell>
                 <TableCell>
-                  <IconButton
+                  {/* <IconButton
                     color="error"
-                    onClick={() => handleDelete(member.id)}
+                    onClick={() => {
+                      setDeleteModalOpen(true);
+                      // handleDelete(member.id);
+                    }}
                   >
                     <SvgIcon>
                       <DeleteOutlineIcon />
                     </SvgIcon>
-                  </IconButton>
+                  </IconButton> */}
                   <IconButton
                     color="info"
                     onClick={() => onSelect?.(member.id)}

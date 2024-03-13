@@ -21,7 +21,7 @@ import MemberDrawer from './components/member-drawer';
 import MemberListSearch from './components/member-list-search';
 import MemberListTable from './components/member-list-table';
 import FirebaseMembers from 'src/firebaseServices/membres';
-
+import { membersData } from './data';
 interface Filters {
   query?: string;
   status?: string;
@@ -107,7 +107,9 @@ const useMembersStore = (searchState: MemberSearchState) => {
     const firebaseMembers = new FirebaseMembers();
 
     try {
-      const response = await firebaseMembers.getAllMembers(searchState);
+      const response = membersData;
+      console.log(response);
+
       if (isMounted()) {
         setState({
           members: response.members,
