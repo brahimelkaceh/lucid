@@ -1,4 +1,4 @@
-export default membersData = {
+const membersData = {
   members: [
     {
       id: '1cEw3aHAuqDSAPfraPYx',
@@ -62,3 +62,4 @@ export default membersData = {
   ],
   count: 5,
 };
+export default membersData;
