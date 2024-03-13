@@ -6,8 +6,8 @@
   "private": true,
   "scripts": {
     "dev": "next",
-    "build": "next build",
-    "start": "next start && next export",
+    "build": "next build && next export",
+    "start": "next start",
     "export": "next export",
     "format:write": "prettier --write \"**/*.{js,jsx,ts,tsx,mdx}\" --cache",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,mdx}\" --cache",

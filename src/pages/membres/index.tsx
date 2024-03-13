@@ -16,12 +16,11 @@ import { Layout as DashboardLayout } from 'src/layouts/dashboard';
 import { OrderListContainer } from 'src/sections/dashboard/order/order-list-container';
 import { RouterLink } from 'src/components/router-link';
 import { paths } from 'src/paths';
-import { Member } from 'src/types/members';
+import { Member, membersData } from 'src/types/members';
 import MemberDrawer from './components/member-drawer';
 import MemberListSearch from './components/member-list-search';
 import MemberListTable from './components/member-list-table';
 import FirebaseMembers from 'src/firebaseServices/membres';
-import membersData from './data';
 interface Filters {
   query?: string;
   status?: string;
