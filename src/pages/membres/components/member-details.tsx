@@ -70,7 +70,7 @@ const MemeberDetails: FC<MemeberDetailsProps> = (props) => {
         isOpen={isDeleteModalOpen}
         onConfirm={handleDelete}
         onCancel={handleDeleteCancel}
-        message="Êtes vous sûr de vouloir supprimer le projet? Cette action sera irréversible."
+        message="Êtes vous sûr de vouloir supprimer ce membre? Cette action sera irréversible."
         id={member.id}
       />
       <Stack
