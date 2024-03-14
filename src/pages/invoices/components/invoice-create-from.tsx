@@ -29,6 +29,7 @@ import { useMounted } from 'src/hooks/use-mounted';
 import { productsApi } from 'src/api/products';
 import { Item, itemsApi } from 'src/api/items';
 import ItemsDetails from './items/Items-details';
+import CreateConfirmationModal from './create-invioce-confirmation';
 
 interface CustomerOption {
   label: string;
@@ -211,7 +212,10 @@ const InvoiceCreateForm: FC = (props) => {
   const [isSwitchOn, setSwitchOn] = useState(false);
   const itemsSearch = useItemsSearch();
   const itemsStore = useItemsStore(itemsSearch.state);
-
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const handleModalCancel = () => {
+    setModalOpen(false);
+  };
   // Function to handle switch state changes
   const handleSwitchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSwitchOn(event.target.checked);
@@ -223,8 +227,8 @@ const InvoiceCreateForm: FC = (props) => {
     onSubmit: async (values, helpers): Promise<void> => {
       try {
         // NOTE: Make API request
-        toast.success('Product created');
-        router.push(paths.dashboard.products.index);
+        toast.success('La facture a été créée avec succès.');
+        router.push(paths.dashboard.invoices.index);
       } catch (err) {
         console.error(err);
         toast.error('Something went wrong!');
@@ -236,10 +240,14 @@ const InvoiceCreateForm: FC = (props) => {
   });
 
   return (
-    <form
-      onSubmit={formik.handleSubmit}
-      {...props}
-    >
+    <form {...props}>
+      <CreateConfirmationModal
+        isOpen={modalOpen}
+        onConfirm={formik.handleSubmit}
+        onCancel={handleModalCancel}
+        message="
+        Êtes-vous sûr de vouloir soumettre ce formulaire pour créer la facture ? "
+      />
       <Stack spacing={4}>
         <Card>
           <CardContent>
@@ -439,7 +447,7 @@ const InvoiceCreateForm: FC = (props) => {
           spacing={1}
         >
           <Button
-            type="submit"
+            onClick={() => setModalOpen(true)}
             variant="contained"
           >
             Prévisualiser

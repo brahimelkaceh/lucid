@@ -45,12 +45,8 @@ const ItemsListTable: FC<ItemListTableProps> = (props) => {
     rowsPerPage = 0,
   } = props;
   const [currentProduct, setCurrentProduct] = useState<string | null>(null);
-  const [isForfait, setForfait] = useState(false);
   const [itemsWithAmount, setItemsWithAmount] = useState<Item[]>([]);
 
-  const handleForfaitChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setForfait(event.target.checked);
-  };
   const handleProductToggle = useCallback((productId: string): void => {
     setCurrentProduct((prevProductId) => {
       if (prevProductId === productId) {
@@ -67,11 +63,12 @@ const ItemsListTable: FC<ItemListTableProps> = (props) => {
 
   const handleProductUpdate = useCallback((): void => {
     setCurrentProduct(null);
-    toast.success('Product updated');
+    toast.success("L'item a été modifié avec succès.");
   }, []);
 
   const handleProductDelete = useCallback((): void => {
-    toast.error('Product cannot be deleted');
+    toast.error("L'item à été supprimé.");
+    setCurrentProduct(null);
   }, []);
 
   useEffect(() => {

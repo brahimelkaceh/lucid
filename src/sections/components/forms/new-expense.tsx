@@ -6,6 +6,8 @@ import TextField from '@mui/material/TextField';
 import { MobileDatePicker } from '@mui/x-date-pickers';
 import { labels } from 'src/api/mail/data';
 import { SeverityPill } from 'src/components/severity-pill';
+import CreateConfirmationModal from 'src/pages/utilities/components/create-utilities-confirmation';
+import toast from 'react-hot-toast';
 
 interface NewExpenseProps {
   onSubmit: (formData: NewExpenseData[]) => void;
@@ -27,7 +29,10 @@ const initialFields: NewExpenseData[] = [
 const NewExpense: FC<NewExpenseProps> = ({ onSubmit }) => {
   const [expenses, setExpenses] = useState<NewExpenseData[]>(initialFields);
   const [successMessage, setSuccessMessage] = useState<string>('');
-
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const handleModalCancel = () => {
+    setModalOpen(false);
+  };
   const handleInputChange = (
     category: string,
     amount: string,
@@ -39,9 +44,7 @@ const NewExpense: FC<NewExpenseProps> = ({ onSubmit }) => {
     setExpenses(updatedExpenses);
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
+  const handleSubmit = () => {
     // Assuming validation is not needed for predefined fields
 
     onSubmit(expenses);
@@ -49,7 +52,8 @@ const NewExpense: FC<NewExpenseProps> = ({ onSubmit }) => {
 
     // Clear the form and show success message
     setExpenses(initialFields);
-    setSuccessMessage('Expenses created successfully!');
+    toast.success('La dépense a été crée avec succés');
+    setModalOpen(false);
 
     // Clear the success message after a delay (e.g., 3 seconds)
     setTimeout(() => {
@@ -59,7 +63,14 @@ const NewExpense: FC<NewExpenseProps> = ({ onSubmit }) => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <form onSubmit={handleSubmit}>
+      <CreateConfirmationModal
+        isOpen={modalOpen}
+        onConfirm={handleSubmit}
+        onCancel={handleModalCancel}
+        message="
+        Êtes-vous sûr de vouloir soumettre ce formulaire pour créer une nouvelle dépense ? "
+      />
+      <form>
         <Grid
           container
           spacing={3}
@@ -125,8 +136,8 @@ const NewExpense: FC<NewExpenseProps> = ({ onSubmit }) => {
         </Grid>
         <Box sx={{ mt: 2 }}>
           <Button
-            type="submit"
             variant="contained"
+            onClick={() => setModalOpen(true)}
           >
             Créer
           </Button>

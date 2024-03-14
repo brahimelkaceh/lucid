@@ -26,6 +26,7 @@ import { productsApi } from 'src/api/products';
 import { Item, itemsApi } from 'src/api/items';
 import ItemsListTable from './items-list-table';
 import ItemsDetails from './Items-details';
+import EditConfirmationModal from '../edit-invoices-confirmation';
 
 interface CustomerOption {
   label: string;
@@ -221,7 +222,10 @@ const InvoiceUpdateForm: FC = (props) => {
   const [isSwitchOn, setSwitchOn] = useState(false);
   const itemsSearch = useItemsSearch();
   const itemsStore = useItemsStore(itemsSearch.state);
-
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const handleModalCancel = () => {
+    setModalOpen(false);
+  };
   // Function to handle switch state changes
   const handleSwitchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSwitchOn(event.target.checked);
@@ -233,8 +237,8 @@ const InvoiceUpdateForm: FC = (props) => {
     onSubmit: async (values, helpers): Promise<void> => {
       try {
         // NOTE: Make API request
-        toast.success('Product created');
-        router.push(paths.dashboard.products.index);
+        toast.success('La facture a été modifiée avec succès.');
+        router.push(paths.dashboard.invoices.index);
       } catch (err) {
         console.error(err);
         toast.error('Something went wrong!');
@@ -246,10 +250,14 @@ const InvoiceUpdateForm: FC = (props) => {
   });
 
   return (
-    <form
-      onSubmit={formik.handleSubmit}
-      {...props}
-    >
+    <form {...props}>
+      <EditConfirmationModal
+        isOpen={modalOpen}
+        onConfirm={formik.handleSubmit}
+        onCancel={handleModalCancel}
+        message="
+        Êtes-vous sûr de vouloir soumettre ce formulaire pour modifier la facture ?"
+      />
       <Stack spacing={4}>
         <Card>
           <CardContent>
@@ -299,7 +307,7 @@ const InvoiceUpdateForm: FC = (props) => {
                   >
                     {statusOption.map((status) => (
                       <MenuItem
-                        key={status.id} // Assuming you want to use the 'id' as the key
+                        key={status.id}
                         value={status.id}
                       >
                         {status.label}
@@ -476,7 +484,7 @@ const InvoiceUpdateForm: FC = (props) => {
           spacing={1}
         >
           <Button
-            type="submit"
+            onClick={() => setModalOpen(true)}
             variant="contained"
           >
             Prévisualiser

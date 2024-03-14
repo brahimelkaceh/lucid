@@ -13,7 +13,6 @@ import { useDialog } from 'src/hooks/use-dialog';
 import { useMounted } from 'src/hooks/use-mounted';
 import { usePageView } from 'src/hooks/use-page-view';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard';
-import { OrderListContainer } from 'src/sections/dashboard/order/order-list-container';
 import { RouterLink } from 'src/components/router-link';
 import { paths } from 'src/paths';
 import { Member, membersData } from 'src/types/members';
@@ -21,6 +20,7 @@ import MemberDrawer from './components/member-drawer';
 import MemberListSearch from './components/member-list-search';
 import MemberListTable from './components/member-list-table';
 import FirebaseMembers from 'src/firebaseServices/membres';
+import { MemberListContainer } from './components/member-list-container';
 interface Filters {
   query?: string;
   status?: string;
@@ -195,7 +195,7 @@ const Page: NextPage = () => {
             top: 0,
           }}
         >
-          <OrderListContainer open={dialog.open}>
+          <MemberListContainer open={dialog.open}>
             <Box sx={{ p: 3 }}>
               <Stack
                 alignItems="flex-start"
@@ -241,7 +241,7 @@ const Page: NextPage = () => {
               rowsPerPage={membersSearch.state.rowsPerPage}
               onDeleteMember={membersStore.onDeleteMember}
             />
-          </OrderListContainer>
+          </MemberListContainer>
           <MemberDrawer
             container={rootRef.current}
             onClose={dialog.handleClose}

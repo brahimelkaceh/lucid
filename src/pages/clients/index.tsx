@@ -58,10 +58,9 @@ const Page: NextPage = () => {
                   </div>
                 </Stack>
               </Box>
-              <Divider />
             </Grid>
             <Grid xs={12}>
-              <Container maxWidth="lg">
+              <Container maxWidth="xl">
                 <Card>
                   <CardHeader title="Nouveau client" />
                   <Divider />

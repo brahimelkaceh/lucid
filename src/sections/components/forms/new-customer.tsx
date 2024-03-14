@@ -127,7 +127,7 @@ const NewCustomerForm = () => {
             type="submit"
             variant="contained"
           >
-            Créer
+            Créer un client
           </Button>
         </Box>
       </form>

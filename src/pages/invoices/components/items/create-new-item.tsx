@@ -1,40 +1,48 @@
-import type { ChangeEvent, FC, MouseEvent } from 'react';
-import { Fragment, useCallback, useEffect, useState } from 'react';
-
 import Button from '@mui/material/Button';
 import CardContent from '@mui/material/CardContent';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 
-import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { FormControlLabel, OutlinedInput, Switch } from '@mui/material';
+import { OutlinedInput, Switch } from '@mui/material';
+import { useFormik } from 'formik';
+import toast from 'react-hot-toast';
 
 const CreateNewItem = () => {
-  const [isForfait, setForfait] = useState(false);
-
-  const handleForfaitChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setForfait(event.target.checked);
-  };
-
+  const formik = useFormik({
+    initialValues: {
+      description: '',
+      price: '',
+      quantity: '',
+    },
+    onSubmit: async (values, helpers): Promise<void> => {
+      try {
+        // NOTE: Make API request
+        toast.success('Le item a été ajouté avec succès.');
+        formik.resetForm();
+      } catch (err) {
+        console.error(err);
+        toast.error('Something went wrong!');
+        helpers.setStatus({ success: false });
+        helpers.setSubmitting(false);
+      }
+    },
+  });
   return (
     <CardContent>
       <Grid
-        container
-        spacing={0}
+        item
+        md={12}
+        xs={12}
       >
-        <Grid
-          item
-          md={12}
-          xs={12}
+        <Typography
+          sx={{ mb: 1 }}
+          variant="subtitle2"
         >
-          <Typography
-            sx={{ mb: 1 }}
-            variant="subtitle2"
-          >
-            Description
-          </Typography>
+          Description
+        </Typography>
+        <form>
           <Grid
             container
             spacing={2}
@@ -49,6 +57,9 @@ const CreateNewItem = () => {
                 multiline
                 rows={4}
                 label="Description"
+                name="description"
+                value={formik.values.description}
+                onChange={formik.handleChange}
               />
             </Grid>
 
@@ -67,7 +78,9 @@ const CreateNewItem = () => {
                 <TextField
                   fullWidth
                   label="Prix unité"
-                  name="sku"
+                  name="price"
+                  value={formik.values.price}
+                  onChange={formik.handleChange}
                 />
               </Grid>
 
@@ -81,6 +94,8 @@ const CreateNewItem = () => {
                   label="Quantité"
                   type="number"
                   name="quantity"
+                  value={formik.values.quantity}
+                  onChange={formik.handleChange}
                 ></TextField>
               </Grid>
             </Grid>
@@ -96,8 +111,10 @@ const CreateNewItem = () => {
                 spacing={2}
               >
                 <Button
-                  type="submit"
                   variant="contained"
+                  onClick={() => {
+                    formik.handleSubmit();
+                  }}
                 >
                   Ajouter
                 </Button>
@@ -110,7 +127,7 @@ const CreateNewItem = () => {
               </Stack>
             </Grid>
           </Grid>
-        </Grid>
+        </form>
       </Grid>
     </CardContent>
   );
