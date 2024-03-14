@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles';
 
-export const MemberListContainer = styled('div', { shouldForwardProp: (prop) => prop !== 'open' })<{
+const MemberListContainer = styled('div', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
 }>(({ theme, open }) => ({
   flexGrow: 1,
@@ -23,3 +23,4 @@ export const MemberListContainer = styled('div', { shouldForwardProp: (prop) => 
     }),
   }),
 }));
+export default MemberListContainer;

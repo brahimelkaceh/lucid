@@ -20,7 +20,7 @@ import MemberDrawer from './components/member-drawer';
 import MemberListSearch from './components/member-list-search';
 import MemberListTable from './components/member-list-table';
 import FirebaseMembers from 'src/firebaseServices/membres';
-import { MemberListContainer } from './components/member-list-container';
+import MemberListContainer from './components/member-list-container';
 interface Filters {
   query?: string;
   status?: string;
