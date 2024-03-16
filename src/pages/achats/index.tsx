@@ -33,7 +33,7 @@ import PurchaseCreateForm from './sections/create-purchase';
 import { paths } from 'src/paths';
 import { RouterLink } from 'src/components/router-link';
 import { BreadcrumbsSeparator } from 'src/components/breadcrumbs-separator';
-import { PurchaseListContainer } from './components/purchase-list-container';
+import PurchaseListContainer from './components/purchase-list-container';
 
 interface Filters {
   query?: string;

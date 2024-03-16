@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles';
 
-export const PurchaseListContainer = styled('div', {
+const PurchaseListContainer = styled('div', {
   shouldForwardProp: (prop) => prop !== 'open',
 })<{
   open?: boolean;
@@ -25,3 +25,4 @@ export const PurchaseListContainer = styled('div', {
     }),
   }),
 }));
+export default PurchaseListContainer;
