@@ -1,4 +1,4 @@
-import type { ChangeEvent, FC, MouseEvent } from 'react';
+import { useState, type ChangeEvent, type FC, type MouseEvent } from 'react';
 import PropTypes from 'prop-types';
 import numeral from 'numeral';
 import Table from '@mui/material/Table';
@@ -12,6 +12,8 @@ import ArrowRightIcon from '@untitled-ui/icons-react/build/esm/ArrowRight';
 import { IconButton, SvgIcon, TableHead } from '@mui/material';
 import { Customer } from 'src/types/customer';
 import { format } from 'date-fns';
+import DeleteConfirmationModal from './delete-confirmation';
+import toast from 'react-hot-toast';
 
 interface SalaryListTableProps {
   count?: number;
@@ -70,11 +72,12 @@ const SalaryListTable: FC<SalaryListTableProps> = (props) => {
                 </TableCell>
 
                 <TableCell>
-                  <IconButton color="error">
+                  {/* <IconButton color="error">
                     <SvgIcon>
                       <DeleteOutlineIcon />
                     </SvgIcon>
-                  </IconButton>
+                  </IconButton> */}
+
                   <IconButton
                     color="info"
                     onClick={() => onSelect?.(member.id)}
@@ -89,6 +92,7 @@ const SalaryListTable: FC<SalaryListTableProps> = (props) => {
           })}
         </TableBody>
       </Table>
+
       <TablePagination
         component="div"
         count={count}

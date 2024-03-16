@@ -10,6 +10,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import SaveIcon from '@mui/icons-material/Save';
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, Stack } from '@mui/system';
+import toast from 'react-hot-toast';
 
 interface PaymentHistory {
   date: string;
@@ -38,6 +39,7 @@ const PaymentHistoryTableRow: React.FC<PaymentHistoryTableRowProps> = ({
   const handleSaveClick = () => {
     // Handle saving the edited values (e.g., make an API call, update state, etc.)
     setEditMode(false);
+    toast.success('Le virement a été modifié avec succès');
   };
 
   const handleCancelClick = () => {
@@ -47,6 +49,7 @@ const PaymentHistoryTableRow: React.FC<PaymentHistoryTableRowProps> = ({
 
   const handleDeleteClick = () => {
     // Handle deleting the record
+    toast.success('Le virement a été supprimé avec succès');
     onDelete(id);
   };
 

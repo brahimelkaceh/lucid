@@ -3,8 +3,12 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
-import { Autocomplete } from '@mui/material';
+import { Autocomplete, MenuItem } from '@mui/material';
 import { MobileDatePicker } from '@mui/x-date-pickers';
+import { useFormik } from 'formik';
+import toast from 'react-hot-toast';
+import { paths } from 'src/paths';
+import { useRouter } from 'next/router';
 
 interface NewPaymentProps {
   onSubmit: (formData: FormData) => void;
@@ -30,43 +34,34 @@ interface FormData {
 }
 
 const NewPayment: FC<NewPaymentProps> = ({ onSubmit }) => {
-  const [amount, setAmount] = useState<number | ''>(0);
-  const [selectedSalary, setSelectedSalary] = useState<Option | null>(null);
-  const [date, setDate] = useState<Date | null>(new Date());
+  const router = useRouter();
 
-  const handleSalaryChange = (event: React.ChangeEvent<{}>, value: Option | null) => {
-    setSelectedSalary(value);
-  };
+  const formik = useFormik({
+    initialValues: {
+      amount: '',
+      salary: '',
+      date: new Date(),
+    },
+    // validationSchema: validationSchema,
+    onSubmit: async (values, { setSubmitting, resetForm }) => {
+      console.log(values);
 
-  const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = event.target.value;
-    // Convert the input value to a number or set to an empty string if not a valid number
-    const newValue: number | '' = /^\d+$/.test(inputValue) ? Number(inputValue) : '';
-
-    setAmount(newValue);
-  };
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    try {
-      const formData: FormData = {
-        amount,
-        salary: selectedSalary ? selectedSalary.value : null,
-        date,
-      };
-
-      console.log(formData);
-
-      onSubmit(formData);
-    } catch (error) {
-      console.error('Submission failed:', error);
-    }
-  };
-
+      try {
+        // Handle form submission
+        toast.success('Nouveau virement créé avec succès !');
+        router.replace(paths.dashboard.salary.index);
+        resetForm();
+      } catch (error) {
+        toast.error('Erreur lors de la création un nouveau virement!');
+        console.error('Erreur lors de la création un nouveau virement!: ', error);
+      } finally {
+        setSubmitting(false);
+      }
+    },
+  });
   return (
     <Box sx={{ p: 3 }}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={formik.handleSubmit}>
         <Grid
           container
           spacing={1}
@@ -76,21 +71,28 @@ const NewPayment: FC<NewPaymentProps> = ({ onSubmit }) => {
             xs={12}
             md={12}
           >
-            <Autocomplete
-              getOptionLabel={(option: Option) => option.text}
-              options={salaries}
-              onChange={handleSalaryChange}
-              value={selectedSalary}
-              renderInput={(params): JSX.Element => (
-                <TextField
-                  {...params}
-                  fullWidth
-                  label="Choisir un(e) salarié(e)"
-                  name="salary"
-                  size="small"
-                />
-              )}
-            />
+            <TextField
+              fullWidth
+              label="Choisir un(e) salarié(e)"
+              name="salary"
+              value={formik.values.salary}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.salary && Boolean(formik.errors.salary)}
+              helperText={formik.touched.salary && formik.errors.salary}
+              select
+              size="small"
+            >
+              <MenuItem disabled> --</MenuItem>
+              {salaries?.map((salary) => (
+                <MenuItem
+                  key={salary?.value}
+                  value={salary?.value}
+                >
+                  {salary.text}
+                </MenuItem>
+              ))}
+            </TextField>
           </Grid>
           <Grid
             item
@@ -104,8 +106,8 @@ const NewPayment: FC<NewPaymentProps> = ({ onSubmit }) => {
               required
               type="number"
               size="small"
-              value={amount}
-              onChange={handleAmountChange}
+              value={formik.values.amount}
+              onChange={formik.handleChange}
             />
           </Grid>
           <Grid
@@ -115,8 +117,8 @@ const NewPayment: FC<NewPaymentProps> = ({ onSubmit }) => {
           >
             <MobileDatePicker
               label="Date de versement"
-              onChange={(newDate) => setDate(newDate)}
-              value={date}
+              onChange={(newDate) => formik.setFieldValue('date', newDate)}
+              value={formik.values.date}
             />
           </Grid>
         </Grid>

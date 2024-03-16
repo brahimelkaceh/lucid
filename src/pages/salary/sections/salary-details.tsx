@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { useState, type FC } from 'react';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 import numeral from 'numeral';
@@ -22,6 +22,10 @@ import { SeverityPill } from 'src/components/severity-pill';
 import { Scrollbar } from 'src/components/scrollbar';
 import { Customer } from 'src/types/customer';
 import PaymentHistoryTableRow from './PaymentHistoryTableRow';
+import DeleteConfirmationModal from './delete-confirmation';
+import toast from 'react-hot-toast';
+import DeleteOutline from '@mui/icons-material/DeleteOutline';
+import { Divider } from '@mui/material';
 
 interface SalaryDetailsProps {
   onApprove?: () => void;
@@ -53,8 +57,38 @@ const SalaryDetails: FC<SalaryDetailsProps> = (props) => {
     // For now, let's just log the paymentId
     console.log(`Deleting payment with ID: ${paymentId}`);
   };
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  const handleDeleteClick = () => {
+    setDeleteModalOpen(true);
+  };
+
+  const handleDeleteConfirmation = async (memberId: string | undefined) => {
+    try {
+      console.log('salarié avec id ', memberId, 'est supprimer');
+
+      // await firebaseSlice.deleteSlice(projectId, sliceId, onRefresh);
+      toast.success('Le salarié a été supprimé avec succès!');
+      if (onReject) {
+        onReject();
+      }
+    } catch (error) {
+      console.error('Error deleting member: ', error);
+      toast.error('Échec de la suppression du salarié. Veuillez réessayer.');
+    }
+    setDeleteModalOpen(false);
+  };
+  const handleDeleteCancel = () => {
+    setDeleteModalOpen(false);
+  };
   return (
     <Stack spacing={6}>
+      <DeleteConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onConfirm={handleDeleteConfirmation}
+        onCancel={handleDeleteCancel}
+        message="Êtes vous sûr de vouloir supprimer ce salarié(e)? Cette action sera irréversible."
+        memberId={member?.id}
+      />
       <Stack spacing={3}>
         <Stack
           alignItems="center"
@@ -63,19 +97,37 @@ const SalaryDetails: FC<SalaryDetailsProps> = (props) => {
           spacing={3}
         >
           <Typography variant="h6">Détails</Typography>
-          <Button
-            color="warning"
-            variant="outlined"
-            onClick={onEdit}
-            size="small"
-            startIcon={
-              <SvgIcon>
-                <Edit02Icon />
-              </SvgIcon>
-            }
+          <Stack
+            flexDirection={'row'}
+            gap={2}
           >
-            Modifier
-          </Button>
+            <Button
+              color="error"
+              variant="text"
+              onClick={handleDeleteClick}
+              size="small"
+              startIcon={
+                <SvgIcon>
+                  <DeleteOutline />
+                </SvgIcon>
+              }
+            >
+              Supprimer
+            </Button>
+            <Button
+              color="warning"
+              variant="outlined"
+              onClick={onEdit}
+              size="small"
+              startIcon={
+                <SvgIcon>
+                  <Edit02Icon />
+                </SvgIcon>
+              }
+            >
+              Modifier
+            </Button>
+          </Stack>
         </Stack>
         <PropertyList>
           <PropertyListItem
@@ -108,29 +160,6 @@ const SalaryDetails: FC<SalaryDetailsProps> = (props) => {
             value={'MAD ' + member.totalSpent + '.00'}
           />
         </PropertyList>
-        <Stack
-          alignItems="center"
-          direction="row"
-          flexWrap="wrap"
-          justifyContent="flex-end"
-          spacing={2}
-        >
-          <Button
-            onClick={onApprove}
-            size="small"
-            variant="contained"
-          >
-            Approuver
-          </Button>
-          <Button
-            color="error"
-            onClick={onReject}
-            size="small"
-            variant="outlined"
-          >
-            Rejeter
-          </Button>
-        </Stack>
       </Stack>
       <Stack spacing={3}>
         <Typography variant="h6">Historique des virements</Typography>
