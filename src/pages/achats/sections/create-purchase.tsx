@@ -14,6 +14,9 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { useDialog } from 'src/hooks/use-dialog';
 import { number } from 'prop-types';
 import FileUploader from '../components/file-uploader';
+import { useFormik } from 'formik';
+import toast from 'react-hot-toast';
+import CreateConfirmation from '../components/create-confirmation';
 
 type Option = {
   text: string;
@@ -40,38 +43,47 @@ interface FormValues {
 }
 
 const PurchaseCreateForm: FC = () => {
-  const [depositedDate, setDepositedDate] = useState<Date | null>(new Date());
-  const [dueDate, setDueDate] = useState<Date | null>(new Date());
-
-  const [formData, setFormData] = useState<FormValues>({
-    projectId: null,
-    nom: '',
-    ice: '',
-    depositedDate: null,
-    dueDate: null,
-    amount: null,
-    status: '',
-    method: '',
-    commentaire: '',
-  });
+  const [isOpen, setOpen] = useState<boolean>(false);
+  const handleOpen = () => {
+    // Add logic to Update the selected invoice
+    setOpen(true);
+  };
+  const handleCreateCancel = () => {
+    setOpen(false);
+  };
 
   const uploadDialog = useDialog();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    console.log('Form Data:', formData);
-
-    //! Add logic for form submission here
-  };
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = event.target;
-    const parsedValue = name === 'amount' ? parseFloat(value) : value;
-
-    setFormData((prevData) => ({ ...prevData, [name]: parsedValue, depositedDate, dueDate }));
-  };
+  const formik = useFormik({
+    initialValues: {
+      projectId: null,
+      nom: '',
+      ice: '',
+      depositedDate: null,
+      dueDate: null,
+      amount: null,
+      status: '',
+      method: '',
+      commentaire: '',
+    },
+    onSubmit: async (values, { setSubmitting, resetForm }) => {
+      try {
+        // Handle form submission
+        console.log(values);
+        toast.success('le prestataire créé avec succès !');
+        setOpen(false);
+        resetForm();
+      } catch (error) {
+        toast.error('Erreur lors de la création du prestataire!');
+        console.error('Erreur lors de la création du prestataire!: ', error);
+      } finally {
+        // Set isSubmitting back to false after the submission is complete
+        setSubmitting(false);
+      }
+    },
+  });
   return (
-    <form onSubmit={handleSubmit}>
+    <form>
       <Stack spacing={4}>
         <Box maxWidth="lg">
           <Card>
@@ -89,8 +101,8 @@ const PurchaseCreateForm: FC = () => {
                       fullWidth
                       label="Id Projet"
                       name="projectId"
-                      onChange={handleInputChange}
-                      value={formData.projectId}
+                      onChange={formik.handleChange}
+                      value={formik.values.projectId}
                       select
                     >
                       <MenuItem value="">--</MenuItem>
@@ -115,8 +127,8 @@ const PurchaseCreateForm: FC = () => {
                       fullWidth
                       label="Nom / Raison sociale du prestataire"
                       name="nom"
-                      onChange={handleInputChange}
-                      value={formData.nom}
+                      onChange={formik.handleChange}
+                      value={formik.values.nom}
                     />
                   </Stack>
                 </Grid>
@@ -129,8 +141,8 @@ const PurchaseCreateForm: FC = () => {
                       fullWidth
                       label="ICE"
                       name="ice"
-                      onChange={handleInputChange}
-                      value={formData.ice}
+                      onChange={formik.handleChange}
+                      value={formik.values.ice}
                     />
                   </Stack>
                 </Grid>
@@ -142,8 +154,8 @@ const PurchaseCreateForm: FC = () => {
                     <DatePicker
                       format="dd/MM/yyyy"
                       label="Déposée le"
-                      onChange={(newDate) => setDepositedDate(newDate)}
-                      value={depositedDate}
+                      onChange={(newDate) => formik.setFieldValue('depositedDate', newDate)}
+                      value={formik.values.depositedDate}
                     />
                   </Stack>
                 </Grid>
@@ -155,8 +167,8 @@ const PurchaseCreateForm: FC = () => {
                     <DatePicker
                       format="dd/MM/yyyy"
                       label="Due le"
-                      onChange={(newDate) => setDueDate(newDate)}
-                      value={dueDate}
+                      onChange={(newDate) => formik.setFieldValue('dueDate', newDate)}
+                      value={formik.values.dueDate}
                     />
                   </Stack>
                 </Grid>
@@ -170,8 +182,8 @@ const PurchaseCreateForm: FC = () => {
                       label="Montant"
                       name="amount"
                       type="number"
-                      onChange={handleInputChange}
-                      value={formData.amount}
+                      onChange={formik.handleChange}
+                      value={formik.values.amount}
                     />
                   </Stack>
                 </Grid>
@@ -184,8 +196,8 @@ const PurchaseCreateForm: FC = () => {
                       fullWidth
                       label="Moyen de paiement"
                       name="method"
-                      onChange={handleInputChange}
-                      value={formData.method}
+                      onChange={formik.handleChange}
+                      value={formik.values.method}
                       select
                     >
                       <MenuItem value={1}>Chèque</MenuItem>
@@ -204,8 +216,8 @@ const PurchaseCreateForm: FC = () => {
                       fullWidth
                       label="Statut"
                       name="status"
-                      onChange={handleInputChange}
-                      value={formData.status}
+                      onChange={formik.handleChange}
+                      value={formik.values.status}
                       select
                     >
                       <MenuItem value="paid">Reglé</MenuItem>
@@ -231,8 +243,8 @@ const PurchaseCreateForm: FC = () => {
                       multiline
                       rows={6}
                       name="commentaire"
-                      onChange={handleInputChange}
-                      value={formData.commentaire}
+                      onChange={formik.handleChange}
+                      value={formik.values.commentaire}
                     />
                   </Stack>
                 </Grid>
@@ -259,8 +271,9 @@ const PurchaseCreateForm: FC = () => {
                 Télécharger
               </Button>
               <Button
-                type="submit"
+                // type="submit"
                 variant="contained"
+                onClick={handleOpen}
               >
                 Enregistrer
               </Button>
@@ -271,6 +284,11 @@ const PurchaseCreateForm: FC = () => {
       <FileUploader
         onClose={uploadDialog.handleClose}
         open={uploadDialog.open}
+      />
+      <CreateConfirmation
+        isOpen={isOpen}
+        onConfirm={formik.handleSubmit}
+        onCancel={handleCreateCancel}
       />
     </form>
   );

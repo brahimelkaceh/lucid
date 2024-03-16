@@ -23,7 +23,6 @@ import NewSalary from 'src/sections/components/forms/new-salary';
 import NewPayement from 'src/sections/components/forms/new-paiement';
 import { Breadcrumbs, Divider } from '@mui/material';
 import FilterFunnel01Icon from '@untitled-ui/icons-react/build/esm/FilterFunnel01';
-import { OrderListContainer } from 'src/sections/dashboard/order/order-list-container';
 import { ChangeEvent, MouseEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDialog } from 'src/hooks/use-dialog';
 import { Customer } from 'src/types/customer';
@@ -34,6 +33,7 @@ import PurchaseCreateForm from './sections/create-purchase';
 import { paths } from 'src/paths';
 import { RouterLink } from 'src/components/router-link';
 import { BreadcrumbsSeparator } from 'src/components/breadcrumbs-separator';
+import { PurchaseListContainer } from './components/purchase-list-container';
 
 interface Filters {
   query?: string;
@@ -196,7 +196,7 @@ const Page: NextPage = () => {
           top: 0,
         }}
       >
-        <OrderListContainer open={dialog.open}>
+        <PurchaseListContainer open={dialog.open}>
           <Container
             sx={{
               padding: '25px',
@@ -230,7 +230,7 @@ const Page: NextPage = () => {
               <PurchaseCreateForm />
             </Stack>
           </Container>
-        </OrderListContainer>
+        </PurchaseListContainer>
         <SalaryDrawer
           container={rootRef.current}
           onClose={dialog.handleClose}
