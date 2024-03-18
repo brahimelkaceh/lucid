@@ -4,6 +4,8 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { Autocomplete, FormControlLabel, Grid, MenuItem, Switch } from '@mui/material';
 import { MobileDatePicker } from '@mui/x-date-pickers';
+import { useFormik } from 'formik';
+import toast from 'react-hot-toast';
 
 interface NewOutCashProps {
   onSubmit: (formData: FormData) => void;
@@ -38,35 +40,30 @@ interface FormData {
 }
 
 const NewOutCash: FC<NewOutCashProps> = ({ onSubmit }) => {
-  const [amount, setAmount] = useState<number | ''>(0);
-  const [motif, setMotif] = useState<Motif | null>(null);
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    // Create an object with the form data
-    const formData: FormData = {
-      startDate,
-      amount,
-      motif,
-    };
-    // Log the form data to the console
-    console.log(formData);
-    onSubmit(formData);
-  };
-  const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = event.target.value;
-    // Convert the input value to a number or set to an empty string if not a valid number
-    const newValue: number | '' = /^\d+$/.test(inputValue) ? Number(inputValue) : '';
-
-    setAmount(newValue);
-  };
-  const handleMotifChange = (event: React.ChangeEvent<{}>, value: Motif | null) => {
-    setMotif(value);
-  };
+  const formik = useFormik({
+    initialValues: {
+      amount: null,
+      motif: '',
+      startDate: new Date(),
+    },
+    onSubmit: async (values, { setSubmitting, resetForm }) => {
+      try {
+        // Handle form submission
+        console.log(values);
+        toast.success('la nouvelle sortie créé avec succès !');
+        resetForm();
+      } catch (error) {
+        toast.error('Erreur lors de la création du nouvelle sortie!');
+        console.error('Erreur lors de la création du nouvelle sortie!: ', error);
+      } finally {
+        // Set isSubmitting back to false after the submission is complete
+        setSubmitting(false);
+      }
+    },
+  });
   return (
     <Box sx={{ p: 3 }}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={formik.handleSubmit}>
         <Grid
           container
           spacing={1}
@@ -84,8 +81,8 @@ const NewOutCash: FC<NewOutCashProps> = ({ onSubmit }) => {
               type="number"
               required
               size="small"
-              value={amount}
-              onChange={handleAmountChange}
+              value={formik.values.amount}
+              onChange={formik.handleChange}
             />
           </Grid>
           <Grid
@@ -93,21 +90,30 @@ const NewOutCash: FC<NewOutCashProps> = ({ onSubmit }) => {
             xs={12}
             md={7}
           >
-            <Autocomplete
-              getOptionLabel={(option: Option) => option.text}
-              options={motifs}
-              onChange={handleMotifChange}
-              value={motif}
-              renderInput={(params): JSX.Element => (
-                <TextField
-                  {...params}
-                  fullWidth
-                  label="Motif"
-                  name="projectId"
-                  size="small"
-                />
-              )}
-            />
+            <TextField
+              fullWidth
+              label="Motif"
+              name="motif"
+              size="small"
+              onChange={formik.handleChange}
+              value={formik.values.motif}
+              select
+            >
+              <MenuItem
+                value=""
+                disabled
+              >
+                --
+              </MenuItem>
+              {motifs?.map((motif) => (
+                <MenuItem
+                  value={motif.value}
+                  key={motif.value}
+                >
+                  {motif.text}
+                </MenuItem>
+              ))}
+            </TextField>
           </Grid>
           <Grid
             item
@@ -116,8 +122,8 @@ const NewOutCash: FC<NewOutCashProps> = ({ onSubmit }) => {
           >
             <MobileDatePicker
               label="Date"
-              onChange={(newDate) => setStartDate(newDate)}
-              value={startDate}
+              onChange={(newDate) => formik.setFieldValue('startDate', newDate)}
+              value={formik.values.startDate}
             />
           </Grid>
         </Grid>

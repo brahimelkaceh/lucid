@@ -31,10 +31,9 @@ import { customersApi } from 'src/api/customers';
 import NewCash from 'src/sections/components/forms/new-cash';
 import CashDrawer from './components/chash-drawer';
 import CashStats from './components/cash-stats';
-import CashListSearch from './components/cash-list-search';
-import CashListTable from './components/cash-list-table';
 import NewOutCash from 'src/sections/components/forms/new-out-cash';
 import TableCash from './components/cash-table';
+import CashListContainer from './components/cash-list-container';
 
 interface Filters {
   query?: string;
@@ -197,7 +196,7 @@ const Page: NextPage = () => {
           top: 0,
         }}
       >
-        <OrderListContainer open={dialog.open}>
+        <CashListContainer open={dialog.open}>
           <Box sx={{ p: 1 }}>
             <Stack
               alignItems="flex-start"
@@ -256,7 +255,7 @@ const Page: NextPage = () => {
           <Divider />
           <TableCash />
           <Divider />
-        </OrderListContainer>
+        </CashListContainer>
         <CashDrawer
           container={rootRef.current}
           onClose={dialog.handleClose}

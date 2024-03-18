@@ -140,29 +140,6 @@ const ExpenseDetails: FC<ExpenseDetailsProps> = (props) => {
           </Button>
         </Stack>
       </Stack>
-      {/* <Stack spacing={3}>
-        <Typography variant="h6">Historique des virements</Typography>
-        <Scrollbar>
-          <Table sx={{ minWidth: 400 }}>
-            <TableHead>
-              <TableRow>
-                <TableCell>Date</TableCell>
-                <TableCell>Virement</TableCell>
-                <TableCell align="right">Action</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {dummyData.map((payment) => (
-                <ExpenseHistoryTableRow
-                  key={payment.id}
-                  {...payment}
-                  onDelete={() => handleDeletePayment(payment.id)}
-                />
-              ))}
-            </TableBody>
-          </Table>
-        </Scrollbar>
-      </Stack> */}
     </Stack>
   );
 };
