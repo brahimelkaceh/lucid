@@ -28,7 +28,7 @@ const Page: NextPage = () => {
   };
   return (
     <>
-      <Seo title="Dashboard: Product Create" />
+      <Seo title="Déclarer nouveaux frais" />
       <Box
         component="main"
         sx={{
@@ -59,7 +59,7 @@ const Page: NextPage = () => {
             </Stack>
             <Container maxWidth="lg">
               <Card>
-                <NewExpenses onSubmit={handleSubmit}></NewExpenses>
+                <NewExpenses></NewExpenses>
               </Card>
             </Container>
           </Stack>

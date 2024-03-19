@@ -4,18 +4,21 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { FormControlLabel, Grid, MenuItem, Switch } from '@mui/material';
 import { MobileDatePicker } from '@mui/x-date-pickers';
+import { useFormik } from 'formik';
+import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
+import { paths } from 'src/paths';
+import * as Yup from 'yup';
 
-interface NewExpensesProps {
-  onSubmit: (formData: FormData) => void;
+const validationSchema = Yup.object().shape({
+  projectId: Yup.string().required('Nom projet est requis'),
+  salaryId: Yup.string().required('Salarié est requis'),
+  amount: Yup.number().required('Montant est requis').positive('Le montant doit être positif'),
+});
+interface Option {
+  text: string;
+  value: number;
 }
-type Option = {
-  text: string;
-  value: number;
-};
-type Salaries = {
-  text: string;
-  value: number;
-};
 
 const projects: Option[] = [
   { text: 'project id 1', value: 1 },
@@ -24,13 +27,15 @@ const projects: Option[] = [
   { text: 'project id 4', value: 4 },
   { text: 'project id 5', value: 5 },
 ];
-const salaries: Salaries[] = [
+
+const salaries: Option[] = [
   { text: 'salary 1', value: 1 },
   { text: 'salary 2', value: 2 },
   { text: 'salary 3', value: 3 },
   { text: 'salary 4', value: 4 },
   { text: 'salary 5', value: 5 },
 ];
+
 interface FormData {
   projectId: string;
   salaryId: string;
@@ -39,41 +44,44 @@ interface FormData {
   amount: number | '';
 }
 
-const NewExpenses: FC<NewExpensesProps> = ({ onSubmit }) => {
-  const [projectId, setProjectId] = useState<string>('');
-  const [salaryId, setSalaryId] = useState<string>('');
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
-  const [endDate, setEndDate] = useState<Date | null>(new Date());
-  const [amount, setAmount] = useState<number | ''>(0);
+const NewExpenses: FC = () => {
+  const router = useRouter();
   const [isSwitchOn, setSwitchOn] = useState(false);
+
   const handleSwitchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSwitchOn(event.target.checked);
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    // Create an object with the form data
-    const formData: FormData = {
-      projectId,
-      salaryId,
-      startDate,
-      endDate,
-      amount,
-    };
-    // Log the form data to the console
-    console.log(formData);
-    onSubmit(formData);
-  };
-  const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = event.target.value;
-    // Convert the input value to a number or set to an empty string if not a valid number
-    const newValue: number | '' = /^\d+$/.test(inputValue) ? Number(inputValue) : '';
+  const formik = useFormik<FormData>({
+    initialValues: {
+      projectId: '',
+      salaryId: '',
+      amount: '',
+      startDate: new Date(),
+      endDate: null,
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values, { setSubmitting, resetForm }) => {
+      try {
+        // Handle form submission
+        console.log(values);
 
-    setAmount(newValue);
-  };
+        toast.success('Nouveaux frais créés avec succès !');
+        router.replace(paths.dashboard.expenses.index);
+        resetForm();
+      } catch (error) {
+        toast.error('Erreur lors de la création des nouveaux frais!');
+        console.error('Erreur lors de la création des nouveaux frais!: ', error);
+      } finally {
+        // Set isSubmitting back to false after the submission is complete
+        setSubmitting(false);
+      }
+    },
+  });
+
   return (
     <Box sx={{ p: 3 }}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={formik.handleSubmit}>
         <Grid
           container
           spacing={3}
@@ -87,13 +95,15 @@ const NewExpenses: FC<NewExpensesProps> = ({ onSubmit }) => {
               fullWidth
               label="Nom projet"
               name="projectId"
-              onChange={(event) => setProjectId(event.target.value)}
-              value={projectId}
+              value={formik.values.projectId}
+              onChange={formik.handleChange}
               select
               size="small"
+              error={formik.touched.projectId && Boolean(formik.errors.projectId)}
+              helperText={formik.touched.projectId && formik.errors.projectId}
             >
               <MenuItem value="">--</MenuItem>
-              {projects?.map((project) => (
+              {projects.map((project) => (
                 <MenuItem
                   value={project.value}
                   key={project.value}
@@ -111,15 +121,17 @@ const NewExpenses: FC<NewExpensesProps> = ({ onSubmit }) => {
           >
             <TextField
               fullWidth
-              label="Salarié "
+              label="Salarié"
               name="salaryId"
-              onChange={(event) => setSalaryId(event.target.value)}
-              value={salaryId}
+              value={formik.values.salaryId}
+              onChange={formik.handleChange}
               select
               size="small"
+              error={formik.touched.salaryId && Boolean(formik.errors.salaryId)}
+              helperText={formik.touched.salaryId && formik.errors.salaryId}
             >
               <MenuItem value="">--</MenuItem>
-              {salaries?.map((salary) => (
+              {salaries.map((salary) => (
                 <MenuItem
                   value={salary.value}
                   key={salary.value}
@@ -148,12 +160,13 @@ const NewExpenses: FC<NewExpensesProps> = ({ onSubmit }) => {
                 type="number"
                 required
                 size="small"
-                value={amount}
-                onChange={handleAmountChange}
+                value={formik.values.amount}
+                onChange={formik.handleChange}
+                error={formik.touched.amount && Boolean(formik.errors.amount)}
+                helperText={formik.touched.amount && formik.errors.amount}
               />
             </Grid>
           </Grid>
-
           <Grid
             item
             xs={12}
@@ -161,8 +174,8 @@ const NewExpenses: FC<NewExpensesProps> = ({ onSubmit }) => {
           >
             <MobileDatePicker
               label="Date"
-              onChange={(newDate) => setStartDate(newDate)}
-              value={startDate}
+              onChange={(newDate) => formik.setFieldValue('startDate', newDate)}
+              value={formik.values.startDate}
             />
           </Grid>
           <Grid
@@ -172,8 +185,8 @@ const NewExpenses: FC<NewExpensesProps> = ({ onSubmit }) => {
           >
             <MobileDatePicker
               label="Ajout date de fin"
-              onChange={(newDate) => setEndDate(newDate)}
-              value={endDate}
+              onChange={(newDate) => formik.setFieldValue('endDate', isSwitchOn ? newDate : null)}
+              value={formik.values.endDate}
               disabled={!isSwitchOn}
             />
           </Grid>
