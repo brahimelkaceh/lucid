@@ -47,7 +47,7 @@ const Page: NextPage = () => {
               </Breadcrumbs>
             </Stack>
 
-            <EditExpense onSubmit={handleSubmit} />
+            <EditExpense />
           </Stack>
         </Container>
       </Box>

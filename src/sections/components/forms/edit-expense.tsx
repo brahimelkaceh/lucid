@@ -19,10 +19,17 @@ import { useDialog } from 'src/hooks/use-dialog';
 import Upload01 from '@untitled-ui/icons-react/build/esm/Upload01';
 import FileUploader from 'src/pages/expenses/components/file-uploader';
 import { SeverityPill } from 'src/components/severity-pill';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/router';
+import { paths } from 'src/paths';
 
-interface EditExpenseProps {
-  onSubmit: (formData: FormData) => void;
-}
+const validationSchema = Yup.object().shape({
+  projectId: Yup.string().required('Nom projet est requis'),
+  salaryId: Yup.string().required('Salarié est requis'),
+  amount: Yup.number().required('Montant est requis').positive('Le montant doit être positif'),
+});
 
 type Option = {
   text: string;
@@ -42,9 +49,11 @@ type ExpenseDetails = {
 interface FormData {
   projectId: string;
   salaryId: string;
+  comment: string;
   startDate: Date | null;
   endDate: Date | null;
   amount: number | '';
+  isValid: boolean;
 }
 
 const expenseDetails: ExpenseDetails[] = [
@@ -71,38 +80,44 @@ const salaries: Salaries[] = [
   { text: 'salary 5', value: 5 },
 ];
 
-const EditExpense: FC<EditExpenseProps> = ({ onSubmit }) => {
-  const [formData, setFormData] = useState<FormData>({
-    projectId: '',
-    salaryId: '',
-    startDate: new Date(),
-    endDate: new Date(),
-    amount: 0,
-  });
+const EditExpense: FC = () => {
+  const router = useRouter();
+
   const [isSwitchOn, setSwitchOn] = useState(false);
   const handleSwitchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSwitchOn(event.target.checked);
   };
-  const [isValid, setValid] = useState(false);
-  const handleValidChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setValid(event.target.checked);
-  };
 
   const uploadDialog = useDialog();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const updatedFormData = { ...formData, isValid }; // Include isValid in the formData
+  const formik = useFormik<FormData>({
+    initialValues: {
+      projectId: '',
+      salaryId: '',
+      amount: '',
+      comment: '',
+      startDate: new Date(),
+      endDate: null,
+      isValid: false,
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values, { setSubmitting, resetForm }) => {
+      try {
+        // Handle form submission
+        console.log(values);
 
-    console.log(updatedFormData);
-    onSubmit(formData);
-  };
-
-  const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = event.target.value;
-    const newValue: number | '' = /^\d+$/.test(inputValue) ? Number(inputValue) : '';
-    setFormData({ ...formData, amount: newValue });
-  };
+        toast.success('Nouveaux frais modifié avec succès !');
+        router.replace(paths.dashboard.expenses.index);
+        resetForm();
+      } catch (error) {
+        toast.error('Erreur lors de la modification des nouveaux frais!');
+        console.error('Erreur lors de la modification des nouveaux frais!: ', error);
+      } finally {
+        // Set isSubmitting back to false after the submission is complete
+        setSubmitting(false);
+      }
+    },
+  });
 
   const renderExpenseDetails = (detail: ExpenseDetails) => (
     <Grid
@@ -156,7 +171,7 @@ const EditExpense: FC<EditExpenseProps> = ({ onSubmit }) => {
   );
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={formik.handleSubmit}>
       <Stack spacing={4}>
         <Box maxWidth="lg">
           <Card>
@@ -172,17 +187,17 @@ const EditExpense: FC<EditExpenseProps> = ({ onSubmit }) => {
                 >
                   <TextField
                     fullWidth
-                    label="Id Projet"
+                    label="Nom projet"
                     name="projectId"
-                    onChange={(event) =>
-                      setFormData({ ...formData, projectId: event.target.value })
-                    }
-                    value={formData.projectId}
+                    value={formik.values.projectId}
+                    onChange={formik.handleChange}
                     select
                     size="small"
+                    error={formik.touched.projectId && Boolean(formik.errors.projectId)}
+                    helperText={formik.touched.projectId && formik.errors.projectId}
                   >
                     <MenuItem value="">--</MenuItem>
-                    {projects?.map((project) => (
+                    {projects.map((project) => (
                       <MenuItem
                         value={project.value}
                         key={project.value}
@@ -200,15 +215,17 @@ const EditExpense: FC<EditExpenseProps> = ({ onSubmit }) => {
                 >
                   <TextField
                     fullWidth
-                    label="Salarié "
+                    label="Salarié"
                     name="salaryId"
-                    onChange={(event) => setFormData({ ...formData, salaryId: event.target.value })}
-                    value={formData.salaryId}
+                    value={formik.values.salaryId}
+                    onChange={formik.handleChange}
                     select
                     size="small"
+                    error={formik.touched.salaryId && Boolean(formik.errors.salaryId)}
+                    helperText={formik.touched.salaryId && formik.errors.salaryId}
                   >
                     <MenuItem value="">--</MenuItem>
-                    {salaries?.map((salary) => (
+                    {salaries.map((salary) => (
                       <MenuItem
                         value={salary.value}
                         key={salary.value}
@@ -237,8 +254,10 @@ const EditExpense: FC<EditExpenseProps> = ({ onSubmit }) => {
                       type="number"
                       required
                       size="small"
-                      value={formData.amount}
-                      onChange={handleAmountChange}
+                      value={formik.values.amount}
+                      onChange={formik.handleChange}
+                      error={formik.touched.amount && Boolean(formik.errors.amount)}
+                      helperText={formik.touched.amount && formik.errors.amount}
                     />
                   </Grid>
                   <Grid
@@ -251,6 +270,9 @@ const EditExpense: FC<EditExpenseProps> = ({ onSubmit }) => {
                       multiline
                       rows={2}
                       placeholder="Commentaire"
+                      name="comment"
+                      value={formik.values.comment}
+                      onChange={formik.handleChange}
                     />
                   </Grid>
                   <Grid
@@ -260,8 +282,8 @@ const EditExpense: FC<EditExpenseProps> = ({ onSubmit }) => {
                   >
                     <MobileDatePicker
                       label="Date"
-                      onChange={(newDate) => setFormData({ ...formData, startDate: newDate })}
-                      value={formData.startDate}
+                      onChange={(newDate) => formik.setFieldValue('startDate', newDate)}
+                      value={formik.values.startDate}
                     />
                   </Grid>
                   <Grid
@@ -271,8 +293,10 @@ const EditExpense: FC<EditExpenseProps> = ({ onSubmit }) => {
                   >
                     <MobileDatePicker
                       label="Ajout date de fin"
-                      onChange={(newDate) => setFormData({ ...formData, endDate: newDate })}
-                      value={formData.endDate}
+                      onChange={(newDate) =>
+                        formik.setFieldValue('endDate', isSwitchOn ? newDate : null)
+                      }
+                      value={formik.values.endDate}
                       disabled={!isSwitchOn}
                     />
                   </Grid>
@@ -304,9 +328,11 @@ const EditExpense: FC<EditExpenseProps> = ({ onSubmit }) => {
                 <FormControlLabel
                   control={
                     <Switch
-                      checked={isValid}
-                      onChange={handleValidChange}
-                      name="allDay"
+                      name="isValid"
+                      checked={formik?.values.isValid}
+                      onChange={(e) => {
+                        formik?.setFieldValue('isValid', e.target.checked);
+                      }}
                     />
                   }
                   label="Validié"
