@@ -8,12 +8,13 @@ import { usePopover } from 'src/hooks/use-popover';
 
 import { LanguagePopover } from './language-popover';
 
-type Language = 'en' | 'de' | 'es';
+type Language = 'en' | 'de' | 'es' | 'fr';
 
 const languages: Record<Language, string> = {
   en: '/assets/flags/flag-uk.svg',
   de: '/assets/flags/flag-de.svg',
   es: '/assets/flags/flag-es.svg',
+  fr: '/assets/flags/flag-es.svg',
 };
 
 export const LanguageSwitch: FC = () => {

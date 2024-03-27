@@ -34,6 +34,10 @@ const languageOptions: LanguageOptions = {
     icon: '/assets/flags/flag-es.svg',
     label: 'Spanish',
   },
+  // fr: {
+  //   icon: '/assets/flags/flag-es.svg',
+  //   label: 'French',
+  // },
 };
 
 interface LanguagePopoverProps {

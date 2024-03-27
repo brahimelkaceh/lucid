@@ -54,7 +54,7 @@ export const EcommerceStats: FC<EcommerceStatsProps> = (props) => {
                   color="text.main"
                   variant="body2"
                 >
-                  Solde trésorerie
+                  Solde caisse
                 </Typography>
                 <Typography variant="h5">{formattedSales}</Typography>
               </div>

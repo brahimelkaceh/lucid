@@ -31,7 +31,7 @@ const Page: NextPage = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          py: 1,
+          py: 8,
         }}
       >
         <Container maxWidth={settings.stretch ? false : 'xl'}>
