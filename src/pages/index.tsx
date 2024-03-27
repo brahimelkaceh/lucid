@@ -16,11 +16,13 @@ import { Layout as DashboardLayout } from 'src/layouts/dashboard';
 import { EcommerceStats } from 'src/sections/dashboard/ecommerce/ecommerce-stats';
 import { EcommerceProducts } from 'src/sections/dashboard/ecommerce/ecommerce-products';
 import DashboardStats from 'src/sections/components/quick-stats/dashboard-quick-stats';
+import { useTranslation } from 'react-i18next';
 
 const now = new Date();
 
 const Page: NextPage = () => {
   const settings = useSettings();
+  const { t } = useTranslation();
 
   usePageView();
 

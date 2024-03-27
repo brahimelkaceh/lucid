@@ -1,6 +1,7 @@
 export const tokens = {
   common: {
     languageChanged: 'common.languageChanged',
+    soldecaisse: 'common.soldecaisse',
   },
   nav: {
     academy: 'nav.academy',
