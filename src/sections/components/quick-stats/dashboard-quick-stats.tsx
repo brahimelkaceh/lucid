@@ -173,13 +173,16 @@ const DashboardStats: FC = () => {
         </Card>
       </Grid>
       <Grid
-        xs={6}
-        md={6}
+        xs={12}
+        md={12}
         lg={4}
         container
         spacing={4}
       >
-        <Grid xs={12}>
+        <Grid
+          xs={6}
+          lg={12}
+        >
           <Card>
             <Stack
               alignItems="center"
@@ -220,7 +223,10 @@ const DashboardStats: FC = () => {
             </Stack>
           </Card>
         </Grid>
-        <Grid xs={12}>
+        <Grid
+          xs={6}
+          lg={12}
+        >
           <Card>
             <Stack
               alignItems="center"
@@ -264,7 +270,6 @@ const DashboardStats: FC = () => {
       </Grid>
       <Grid
         xs={12}
-        md={6}
         lg={8}
         container
       >
